@@ -1,0 +1,19 @@
+I want to be able to use XY compressed files (and maybe LZMA files)
+under older versions of Python, so decided to backport 'lzma' from
+Python 3.3.
+
+Python 3.3 onwards includes in the standard library module 'lzma',
+providing support for working with LZMA and XY compressed files via
+the XZ Utils C library (XY Utils is in a sense LZMA v2). I'm not
+sure why they Python module is still called 'lzma', but it is.
+
+* Python's lzma - http://docs.python.org/dev/library/lzma.html
+* XZ Utils - http://tukaani.org/xz/
+
+There are some older Python libraries like PylibLZMA and PyLZMA
+but these are both using LZMA Utils (not XY Utils, so they have
+no XY support).
+
+* PylibLZMA - http://pypi.python.org/pypi/pyliblzma
+* PyLZMA - http://pypi.python.org/pypi/pylzma/
+* LZMA Utils - http://tukaani.org/lzma/
