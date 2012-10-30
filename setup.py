@@ -13,7 +13,7 @@ from distutils.command.build_ext import build_ext
 from distutils.core import setup
 from distutils.extension import Extension
 
-packages = ["backports.lzma"]
+packages = ["backports", "backports.lzma"]
 home = os.path.expanduser("~")
 extens = [Extension('backports/lzma/_lzma',
                     ['backports/lzma/_lzmamodule.c'],
