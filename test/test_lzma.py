@@ -19,7 +19,7 @@ class CompressorDecompressorTestCase(unittest.TestCase):
         self.assertRaises(TypeError, LZMACompressor, [])
         self.assertRaises(TypeError, LZMACompressor, format=3.45)
         self.assertRaises(TypeError, LZMACompressor, check="")
-        self.assertRaises(TypeError, LZMACompressor, preset="asdf")
+        self.assertRaises((TypeError, SystemError), LZMACompressor, preset="asdf")
         self.assertRaises(TypeError, LZMACompressor, filters=3)
         # Can't specify FORMAT_AUTO when compressing.
         self.assertRaises(ValueError, LZMACompressor, format=lzma.FORMAT_AUTO)
@@ -28,7 +28,7 @@ class CompressorDecompressorTestCase(unittest.TestCase):
             LZMACompressor(preset=7, filters=[{"id": lzma.FILTER_LZMA2}])
 
         self.assertRaises(TypeError, LZMADecompressor, ())
-        self.assertRaises(TypeError, LZMADecompressor, memlimit=b"qw")
+        self.assertRaises((TypeError, SystemError), LZMADecompressor, memlimit=b"qw")
         with self.assertRaises(TypeError):
             LZMADecompressor(lzma.FORMAT_RAW, filters="zzz")
         # Cannot specify a memory limit with FILTER_RAW.
@@ -224,9 +224,9 @@ class CompressDecompressFunctionTestCase(unittest.TestCase):
     def test_bad_args(self):
         self.assertRaises(TypeError, lzma.compress)
         self.assertRaises(TypeError, lzma.compress, [])
-        self.assertRaises(TypeError, lzma.compress, b"", format="xz")
+        self.assertRaises((TypeError, SystemError), lzma.compress, b"", format="xz")
         self.assertRaises(TypeError, lzma.compress, b"", check="none")
-        self.assertRaises(TypeError, lzma.compress, b"", preset="blah")
+        self.assertRaises((TypeError, SystemError), lzma.compress, b"", preset="blah")
         self.assertRaises(TypeError, lzma.compress, b"", filters=1024)
         # Can't specify a preset and a custom filter chain at the same time.
         with self.assertRaises(ValueError):
@@ -235,7 +235,7 @@ class CompressDecompressFunctionTestCase(unittest.TestCase):
         self.assertRaises(TypeError, lzma.decompress)
         self.assertRaises(TypeError, lzma.decompress, [])
         self.assertRaises(TypeError, lzma.decompress, b"", format="lzma")
-        self.assertRaises(TypeError, lzma.decompress, b"", memlimit=7.3e9)
+        self.assertRaises((TypeError, SystemError), lzma.decompress, b"", memlimit=7.3e9)
         with self.assertRaises(TypeError):
             lzma.decompress(b"", format=lzma.FORMAT_RAW, filters={})
         # Cannot specify a memory limit with FILTER_RAW.
@@ -428,7 +428,7 @@ class FileTestCase(unittest.TestCase):
             LZMAFile(BytesIO(COMPRESSED_XZ), check=lzma.CHECK_UNKNOWN)
 
     def test_init_bad_preset(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises((TypeError, SystemError)):
             LZMAFile(BytesIO(), "w", preset=4.39)
         with self.assertRaises(LZMAError):
             LZMAFile(BytesIO(), "w", preset=10)
@@ -438,7 +438,7 @@ class FileTestCase(unittest.TestCase):
             LZMAFile(BytesIO(), "w", preset=-1)
         with self.assertRaises(OverflowError):
             LZMAFile(BytesIO(), "w", preset=-7)
-        with self.assertRaises(TypeError):
+        with self.assertRaises((TypeError, SystemError)):
             LZMAFile(BytesIO(), "w", preset="foo")
         # Cannot specify a preset with mode="r".
         with self.assertRaises(ValueError):
