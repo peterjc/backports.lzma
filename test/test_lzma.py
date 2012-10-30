@@ -7,8 +7,8 @@ from test.support import (
     _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
 )
 
-lzma = import_module("lzma")
-from lzma import LZMACompressor, LZMADecompressor, LZMAError, LZMAFile
+lzma = import_module("backports.lzma")
+from backports.lzma import LZMACompressor, LZMADecompressor, LZMAError, LZMAFile
 
 
 class CompressorDecompressorTestCase(unittest.TestCase):
