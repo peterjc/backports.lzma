@@ -3,6 +3,8 @@
    Initial implementation by Per Øyvind Karlsen.
    Rewritten by Nadeem Vawda.
 
+   Modifications to support Python 3.2 by Peter Cock.
+
 */
 
 #define PY_SSIZE_T_CLEAN
@@ -11,6 +13,49 @@
 #include "structmember.h"
 #ifdef WITH_THREAD
 #include "pythread.h"
+#endif
+
+
+#ifndef _Py_IDENTIFIER
+//Python 3.3 added the _Py_IDENTIFIER macro etc, copying these new
+//definitions here seems to be enough for this to compile on Python 3.2
+//
+//From Pythnon-3.3.0/Include/object.h
+typedef struct _Py_Identifier {
+  struct _Py_Identifier *next;
+  const char* string;
+  PyObject *object;
+} _Py_Identifier;
+#define _Py_static_string(varname, value)  static _Py_Identifier varname = { 0, value, 0 }
+#define _Py_IDENTIFIER(varname) _Py_static_string(PyId_##varname, #varname)
+//From Pythnon-3.3.0/Objects/unicodeobject.c
+static _Py_Identifier *static_strings;
+PyObject *
+_PyUnicode_FromId(_Py_Identifier *id)
+{
+  if (!id->object) {
+    id->object = PyUnicode_DecodeUTF8Stateful(id->string,
+					      strlen(id->string),
+					      NULL, NULL);
+    if (!id->object)
+      return NULL;
+    PyUnicode_InternInPlace(&id->object);
+    assert(!id->next);
+    id->next = static_strings;
+    static_strings = id;
+  }
+  return id->object;
+}
+//From Pythnon-3.3.0/Objects/typeobject.c
+int
+_PyDict_SetItemId(PyObject *v, struct _Py_Identifier *key, PyObject *item)
+{
+  PyObject *kv;
+  kv = _PyUnicode_FromId(key); /* borrowed */
+  if (kv == NULL)
+    return -1;
+  return PyDict_SetItem(v, kv, item);
+}
 #endif
 
 #include <stdarg.h>
