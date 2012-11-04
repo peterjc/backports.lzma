@@ -15,6 +15,42 @@
 #include "pythread.h"
 #endif
 
+#ifndef PyErr_NewExceptionWithDoc
+// Python 3.2 added this.
+//
+// Copied from Python-3.2.3/Python/errors.c
+PyObject *
+PyErr_NewExceptionWithDoc(const char *name, const char *doc,
+                          PyObject *base, PyObject *dict)
+{
+  int result;
+  PyObject *ret = NULL;
+  PyObject *mydict = NULL; /* points to the dict only if we create it */
+  PyObject *docobj;
+
+  if (dict == NULL) {
+    dict = mydict = PyDict_New();
+    if (dict == NULL) {
+      return NULL;
+    }
+  }
+
+  if (doc != NULL) {
+    docobj = PyUnicode_FromString(doc);
+    if (docobj == NULL)
+      goto failure;
+    result = PyDict_SetItemString(dict, "__doc__", docobj);
+    Py_DECREF(docobj);
+    if (result < 0)
+      goto failure;
+  }
+
+  ret = PyErr_NewException(name, base, dict);
+ failure:
+  Py_XDECREF(mydict);
+  return ret;
+}
+#endif
 
 #ifndef _Py_IDENTIFIER
 //Python 3.3 added the _Py_IDENTIFIER macro etc, copying these new
