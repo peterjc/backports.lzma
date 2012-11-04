@@ -514,7 +514,9 @@ class FileTestCase(unittest.TestCase):
             f = LZMAFile(TESTFN)
             try:
                 self.assertEqual(f.fileno(), f._fp.fileno())
-                self.assertIsInstance(f.fileno(), int)
+                #assertIsInstance added in Python 2.7 and 3.2
+                #self.assertIsInstance(f.fileno(), int)
+                self.assertTrue(isinstance(f.fileno(), int))
             finally:
                 f.close()
         self.assertRaises(ValueError, f.fileno)
