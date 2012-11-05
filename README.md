@@ -31,6 +31,39 @@ Support on Python 2.x would be nice to have too, but a lot more
 work.
 
 
+Installation
+============
+
+First you must install the XY Utils C library, which on a Debian
+based Linux distribution can be done in one line:
+
+    $ sudo apt-get install liblzma-dev
+
+Otherwise do this from source, this is what I do on Mac OS X:
+
+    $ curl -O http://tukaani.org/xz/xz-5.0.4.tar.gz
+    $ tar -zxvf xz-5.0.4.tar.gz
+    $ cd xz-5.0.4
+    $ ./configure --prefix=$HOME
+    $ make
+    $ make check
+    $ make install
+
+Now you can install this 'lzma' backport. First download and
+decompress the source code, or clone the github repository:
+
+    $ git clone git://github.com/peterjc/backports.lzma.git
+    $ cd backports.lzma
+    $ python3 setup.py install
+    $ cd test
+    $ python3 test_lzma.py
+
+This should find the XY Util header file and library automatically
+(and will check for a local install under your home directory).
+You should now be able to import the backport from Python 3
+as shown below.
+
+
 Usage
 =====
 
