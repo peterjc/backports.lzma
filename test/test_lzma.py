@@ -649,7 +649,7 @@ class FileTestCase(unittest.TestCase):
                 result = f.read(10)
                 if not result:
                     break
-                self.assertLessEqual(len(result), 10)
+                self.assertTrue(len(result) <= 10)
                 chunks.append(result)
             self.assertEqual(b"".join(chunks), INPUT)
 
@@ -751,12 +751,12 @@ class FileTestCase(unittest.TestCase):
     def test_peek(self):
         with LZMAFile(BytesIO(COMPRESSED_XZ)) as f:
             result = f.peek()
-            self.assertGreater(len(result), 0)
+            self.assertTrue(len(result) > 0)
             self.assertTrue(INPUT.startswith(result))
             self.assertEqual(f.read(), INPUT)
         with LZMAFile(BytesIO(COMPRESSED_XZ)) as f:
             result = f.peek(10)
-            self.assertGreater(len(result), 0)
+            self.assertTrue(len(result) > 0)
             self.assertTrue(INPUT.startswith(result))
             self.assertEqual(f.read(), INPUT)
 
