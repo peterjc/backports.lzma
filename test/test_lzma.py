@@ -8,11 +8,11 @@ from test.support import (
 )
 
 import sys
-if sys.version_info < (3,2):
-    #The API of bigmemtest changed in Python 3.2 so we can't use
+if sys.version_info < (3,3):
+    #The API of bigmemtest changed in Python 3.3 so we can't use
     #it as below, e.g. @bigmemtest(size=_4G + 100, memuse=2)
     #Bit of a hack, but define a dummy decorator here instead,
-    #using the default size 5147 used in Python 3.2,
+    #using the default size 5147 used in Python 3.3,
     def bigmemtest(size, memuse, dry_run=True):
         def decorator(f):
             def wrapper(self):
