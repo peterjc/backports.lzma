@@ -56,6 +56,10 @@ was not available. If this was a systems level Python install,
 as a user you could still install XY Utils and this backport
 under your own account.
 
+This is using the shared 'backports' namespace introduced by Brandon
+Rhodes as documented here: http://pypi.python.org/pypi/backports/
+and http://bitbucket.org/brandon/backports
+
 
 Automated Testing
 =================
