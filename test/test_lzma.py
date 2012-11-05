@@ -221,7 +221,16 @@ class CompressorDecompressorTestCase(unittest.TestCase):
     def test_decompressor_bigmem(self, size):
         lzd = LZMADecompressor()
         blocksize = 10 * 1024 * 1024
-        block = random.getrandbits(blocksize * 8).to_bytes(blocksize, "little")
+        if sys.version_info >= (3,2):
+            block = random.getrandbits(blocksize * 8).to_bytes(blocksize, "little")
+            #Note as the data is random, don't care if big-endian or little-endian
+        else:
+            #The to_bytes method was added in Python 3.2, so can't use it here.
+            #The following works but is very slow (about 2 minutes versus 7 seconds
+            #for the whole test suite):
+            import struct
+            block = struct.pack("L"*blocksize,
+                                *[random.getrandbits(8) for i in range(blocksize)])
         try:
             input = block * (size // blocksize + 1)
             cdata = lzma.compress(input)
