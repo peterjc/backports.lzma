@@ -768,16 +768,16 @@ class FileTestCase(unittest.TestCase):
         with BytesIO(INPUT) as f:
             lines = f.readlines()
         with LZMAFile(BytesIO(COMPRESSED_XZ)) as f:
-            self.assertListEqual(list(iter(f)), lines)
+            self.assertEqual(list(iter(f)), lines)
         with LZMAFile(BytesIO(COMPRESSED_ALONE)) as f:
-            self.assertListEqual(list(iter(f)), lines)
+            self.assertEqual(list(iter(f)), lines)
         with LZMAFile(BytesIO(COMPRESSED_XZ), format=lzma.FORMAT_XZ) as f:
-            self.assertListEqual(list(iter(f)), lines)
+            self.assertEqual(list(iter(f)), lines)
         with LZMAFile(BytesIO(COMPRESSED_ALONE), format=lzma.FORMAT_ALONE) as f:
-            self.assertListEqual(list(iter(f)), lines)
+            self.assertEqual(list(iter(f)), lines)
         with LZMAFile(BytesIO(COMPRESSED_RAW_2),
                       format=lzma.FORMAT_RAW, filters=FILTERS_RAW_2) as f:
-            self.assertListEqual(list(iter(f)), lines)
+            self.assertEqual(list(iter(f)), lines)
 
     def test_readline(self):
         with BytesIO(INPUT) as f:
@@ -790,7 +790,7 @@ class FileTestCase(unittest.TestCase):
         with BytesIO(INPUT) as f:
             lines = f.readlines()
         with LZMAFile(BytesIO(COMPRESSED_XZ)) as f:
-            self.assertListEqual(f.readlines(), lines)
+            self.assertEqual(f.readlines(), lines)
 
     def test_write(self):
         with BytesIO() as dst:
