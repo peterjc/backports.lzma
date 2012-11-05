@@ -21,7 +21,9 @@ if sys.version_info < (3,3):
         return decorator
 
 
-lzma = import_module("backports.lzma")
+#The following style import doesn't work on Python 3.0,
+#lzma = import_module("backports.lzma")
+from backports import lzma
 from backports.lzma import LZMACompressor, LZMADecompressor, LZMAError, LZMAFile
 
 
@@ -38,22 +40,22 @@ class CompressorDecompressorTestCase(unittest.TestCase):
         # Can't specify FORMAT_AUTO when compressing.
         self.assertRaises(ValueError, LZMACompressor, format=lzma.FORMAT_AUTO)
         # Can't specify a preset and a custom filter chain at the same time.
-        with self.assertRaises(ValueError):
-            LZMACompressor(preset=7, filters=[{"id": lzma.FILTER_LZMA2}])
+        self.assertRaises(ValueError, LZMACompressor,
+                          preset=7, filters=[{"id": lzma.FILTER_LZMA2}])
 
         self.assertRaises(TypeError, LZMADecompressor, ())
         self.assertRaises((TypeError, SystemError), LZMADecompressor, memlimit=b"qw")
-        with self.assertRaises(TypeError):
-            LZMADecompressor(lzma.FORMAT_RAW, filters="zzz")
+        self.assertRaises(TypeError, LZMADecompressor,
+                          lzma.FORMAT_RAW, filters="zzz")
         # Cannot specify a memory limit with FILTER_RAW.
-        with self.assertRaises(ValueError):
-            LZMADecompressor(lzma.FORMAT_RAW, memlimit=0x1000000)
+        self.assertRaises(ValueError, LZMADecompressor,
+                          lzma.FORMAT_RAW, memlimit=0x1000000)
         # Can only specify a custom filter chain with FILTER_RAW.
         self.assertRaises(ValueError, LZMADecompressor, filters=FILTERS_RAW_1)
-        with self.assertRaises(ValueError):
-            LZMADecompressor(format=lzma.FORMAT_XZ, filters=FILTERS_RAW_1)
-        with self.assertRaises(ValueError):
-            LZMADecompressor(format=lzma.FORMAT_ALONE, filters=FILTERS_RAW_1)
+        self.assertRaises(ValueError, LZMADecompressor,
+                          format=lzma.FORMAT_XZ, filters=FILTERS_RAW_1)
+        self.assertRaises(ValueError, LZMADecompressor,
+                          format=lzma.FORMAT_ALONE, filters=FILTERS_RAW_1)
 
         lzc = LZMACompressor()
         self.assertRaises(TypeError, lzc.compress)
@@ -73,12 +75,12 @@ class CompressorDecompressorTestCase(unittest.TestCase):
         self.assertRaises(TypeError, LZMACompressor, filters=[b"wobsite"])
         self.assertRaises(ValueError, LZMACompressor, filters=[{"xyzzy": 3}])
         self.assertRaises(ValueError, LZMACompressor, filters=[{"id": 98765}])
-        with self.assertRaises(ValueError):
-            LZMACompressor(filters=[{"id": lzma.FILTER_LZMA2, "foo": 0}])
-        with self.assertRaises(ValueError):
-            LZMACompressor(filters=[{"id": lzma.FILTER_DELTA, "foo": 0}])
-        with self.assertRaises(ValueError):
-            LZMACompressor(filters=[{"id": lzma.FILTER_X86, "foo": 0}])
+        self.assertRaises(ValueError, LZMACompressor,
+                          filters=[{"id": lzma.FILTER_LZMA2, "foo": 0}])
+        self.assertRaises(ValueError, LZMACompressor,
+                          filters=[{"id": lzma.FILTER_DELTA, "foo": 0}])
+        self.assertRaises(ValueError, LZMACompressor,
+                          filters=[{"id": lzma.FILTER_X86, "foo": 0}])
 
     def test_decompressor_after_eof(self):
         lzd = LZMADecompressor()
@@ -252,36 +254,33 @@ class CompressDecompressFunctionTestCase(unittest.TestCase):
         self.assertRaises((TypeError, SystemError), lzma.compress, b"", preset="blah")
         self.assertRaises(TypeError, lzma.compress, b"", filters=1024)
         # Can't specify a preset and a custom filter chain at the same time.
-        with self.assertRaises(ValueError):
-            lzma.compress(b"", preset=3, filters=[{"id": lzma.FILTER_LZMA2}])
+        self.assertRaises(ValueError, lzma.compress,
+                          b"", preset=3, filters=[{"id": lzma.FILTER_LZMA2}])
 
         self.assertRaises(TypeError, lzma.decompress)
         self.assertRaises(TypeError, lzma.decompress, [])
         self.assertRaises(TypeError, lzma.decompress, b"", format="lzma")
         self.assertRaises((TypeError, SystemError), lzma.decompress, b"", memlimit=7.3e9)
-        with self.assertRaises(TypeError):
-            lzma.decompress(b"", format=lzma.FORMAT_RAW, filters={})
+        self.assertRaises(TypeError, lzma.decompress,
+                          b"", format=lzma.FORMAT_RAW, filters={})
         # Cannot specify a memory limit with FILTER_RAW.
-        with self.assertRaises(ValueError):
-            lzma.decompress(b"", format=lzma.FORMAT_RAW, memlimit=0x1000000)
+        self.assertRaises(ValueError, lzma.decompress, 
+                          b"", format=lzma.FORMAT_RAW, memlimit=0x1000000)
         # Can only specify a custom filter chain with FILTER_RAW.
-        with self.assertRaises(ValueError):
-            lzma.decompress(b"", filters=FILTERS_RAW_1)
-        with self.assertRaises(ValueError):
-            lzma.decompress(b"", format=lzma.FORMAT_XZ, filters=FILTERS_RAW_1)
-        with self.assertRaises(ValueError):
-            lzma.decompress(
-                    b"", format=lzma.FORMAT_ALONE, filters=FILTERS_RAW_1)
+        self.assertRaises(ValueError, lzma.decompress,
+                          b"", filters=FILTERS_RAW_1)
+        self.assertRaises(ValueError, lzma.decompress,
+                          b"", format=lzma.FORMAT_XZ, filters=FILTERS_RAW_1)
+        self.assertRaises(ValueError, lzma.decompress,
+                          b"", format=lzma.FORMAT_ALONE, filters=FILTERS_RAW_1)
 
     def test_decompress_memlimit(self):
-        with self.assertRaises(LZMAError):
-            lzma.decompress(COMPRESSED_XZ, memlimit=1024)
-        with self.assertRaises(LZMAError):
-            lzma.decompress(
-                    COMPRESSED_XZ, format=lzma.FORMAT_XZ, memlimit=1024)
-        with self.assertRaises(LZMAError):
-            lzma.decompress(
-                    COMPRESSED_ALONE, format=lzma.FORMAT_ALONE, memlimit=1024)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_XZ, memlimit=1024)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_XZ, format=lzma.FORMAT_XZ, memlimit=1024)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_ALONE, format=lzma.FORMAT_ALONE, memlimit=1024)
 
     # Test LZMADecompressor on known-good input data.
 
@@ -327,15 +326,15 @@ class CompressDecompressFunctionTestCase(unittest.TestCase):
                           format=lzma.FORMAT_RAW, filters=FILTERS_RAW_4)
 
     def test_decompress_bad_input(self):
-        with self.assertRaises(LZMAError):
-            lzma.decompress(COMPRESSED_RAW_1)
-        with self.assertRaises(LZMAError):
-            lzma.decompress(COMPRESSED_ALONE, format=lzma.FORMAT_XZ)
-        with self.assertRaises(LZMAError):
-            lzma.decompress(COMPRESSED_XZ, format=lzma.FORMAT_ALONE)
-        with self.assertRaises(LZMAError):
-            lzma.decompress(COMPRESSED_XZ, format=lzma.FORMAT_RAW,
-                            filters=FILTERS_RAW_1)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_RAW_1)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_ALONE, format=lzma.FORMAT_XZ)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_XZ, format=lzma.FORMAT_ALONE)
+        self.assertRaises(LZMAError, lzma.decompress,
+                          COMPRESSED_XZ, format=lzma.FORMAT_RAW,
+                          filters=FILTERS_RAW_1)
 
     # Test that compress()->decompress() preserves the input data.
 
@@ -413,81 +412,81 @@ class FileTestCase(unittest.TestCase):
                 pass
 
     def test_init_bad_mode(self):
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), (3, "x"))
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "")
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "x")
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "rt")
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "r+")
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "wt")
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "w+")
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), "rw")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), (3, "x"))
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "x")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "rt")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "r+")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "wt")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "w+")
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), "rw")
 
     def test_init_bad_check(self):
-        with self.assertRaises(TypeError):
-            LZMAFile(BytesIO(), "w", check=b"asd")
+        self.assertRaises(TypeError, LZMAFile,
+                          BytesIO(), "w", check=b"asd")
         # CHECK_UNKNOWN and anything above CHECK_ID_MAX should be invalid.
-        with self.assertRaises(LZMAError):
-            LZMAFile(BytesIO(), "w", check=lzma.CHECK_UNKNOWN)
-        with self.assertRaises(LZMAError):
-            LZMAFile(BytesIO(), "w", check=lzma.CHECK_ID_MAX + 3)
+        self.assertRaises(LZMAError, LZMAFile,
+                          BytesIO(), "w", check=lzma.CHECK_UNKNOWN)
+        self.assertRaises(LZMAError, LZMAFile,
+                          BytesIO(), "w", check=lzma.CHECK_ID_MAX + 3)
         # Cannot specify a check with mode="r".
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), check=lzma.CHECK_NONE)
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), check=lzma.CHECK_CRC32)
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), check=lzma.CHECK_CRC64)
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), check=lzma.CHECK_SHA256)
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), check=lzma.CHECK_UNKNOWN)
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), check=lzma.CHECK_NONE)
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), check=lzma.CHECK_CRC32)
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), check=lzma.CHECK_CRC64)
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), check=lzma.CHECK_SHA256)
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(COMPRESSED_XZ), check=lzma.CHECK_UNKNOWN)
 
     def test_init_bad_preset(self):
-        with self.assertRaises((TypeError, SystemError)):
-            LZMAFile(BytesIO(), "w", preset=4.39)
-        with self.assertRaises(LZMAError):
-            LZMAFile(BytesIO(), "w", preset=10)
-        with self.assertRaises(LZMAError):
-            LZMAFile(BytesIO(), "w", preset=23)
-        with self.assertRaises(OverflowError):
-            LZMAFile(BytesIO(), "w", preset=-1)
-        with self.assertRaises(OverflowError):
-            LZMAFile(BytesIO(), "w", preset=-7)
-        with self.assertRaises((TypeError, SystemError)):
-            LZMAFile(BytesIO(), "w", preset="foo")
+        self.assertRaises((TypeError, SystemError), LZMAFile,
+                          BytesIO(), "w", preset=4.39)
+        self.assertRaises(LZMAError, LZMAFile,
+                          BytesIO(), "w", preset=10)
+        self.assertRaises(LZMAError, LZMAFile,
+                          BytesIO(), "w", preset=23)
+        self.assertRaises(OverflowError, LZMAFile,
+                          BytesIO(), "w", preset=-1)
+        self.assertRaises(OverflowError, LZMAFile,
+                          BytesIO(), "w", preset=-7)
+        self.assertRaises((TypeError, SystemError), LZMAFile,
+                          BytesIO(), "w", preset="foo")
         # Cannot specify a preset with mode="r".
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(COMPRESSED_XZ), preset=3)
+        self.assertRaises(ValueError,  LZMAFile,
+                          BytesIO(COMPRESSED_XZ), preset=3)
 
     def test_init_bad_filter_spec(self):
-        with self.assertRaises(TypeError):
-            LZMAFile(BytesIO(), "w", filters=[b"wobsite"])
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(), "w", filters=[{"xyzzy": 3}])
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(), "w", filters=[{"id": 98765}])
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(), "w",
-                     filters=[{"id": lzma.FILTER_LZMA2, "foo": 0}])
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(), "w",
-                     filters=[{"id": lzma.FILTER_DELTA, "foo": 0}])
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(), "w",
-                     filters=[{"id": lzma.FILTER_X86, "foo": 0}])
+        self.assertRaises(TypeError, LZMAFile,
+                          BytesIO(), "w", filters=[b"wobsite"])
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(), "w", filters=[{"xyzzy": 3}])
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(), "w", filters=[{"id": 98765}])
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(), "w",
+                          filters=[{"id": lzma.FILTER_LZMA2, "foo": 0}])
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(), "w",
+                          filters=[{"id": lzma.FILTER_DELTA, "foo": 0}])
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(), "w",
+                          filters=[{"id": lzma.FILTER_X86, "foo": 0}])
 
     def test_init_with_preset_and_filters(self):
-        with self.assertRaises(ValueError):
-            LZMAFile(BytesIO(), "w", format=lzma.FORMAT_RAW,
-                     preset=6, filters=FILTERS_RAW_1)
+        self.assertRaises(ValueError, LZMAFile,
+                          BytesIO(), "w", format=lzma.FORMAT_RAW,
+                          preset=6, filters=FILTERS_RAW_1)
 
     def test_close(self):
         with BytesIO(COMPRESSED_XZ) as src:
@@ -1030,18 +1029,18 @@ class OpenTestCase(unittest.TestCase):
 
     def test_bad_params(self):
         # Test invalid parameter combinations.
-        with self.assertRaises(ValueError):
-            lzma.open(TESTFN, "")
-        with self.assertRaises(ValueError):
-            lzma.open(TESTFN, "x")
-        with self.assertRaises(ValueError):
-            lzma.open(TESTFN, "rbt")
-        with self.assertRaises(ValueError):
-            lzma.open(TESTFN, "rb", encoding="utf-8")
-        with self.assertRaises(ValueError):
-            lzma.open(TESTFN, "rb", errors="ignore")
-        with self.assertRaises(ValueError):
-            lzma.open(TESTFN, "rb", newline="\n")
+        self.assertRaises(ValueError, lzma.open,
+                          TESTFN, "")
+        self.assertRaises(ValueError, lzma.open,
+                          TESTFN, "x")
+        self.assertRaises(ValueError, lzma.open,
+                          TESTFN, "rbt")
+        self.assertRaises(ValueError, lzma.open,
+                          TESTFN, "rb", encoding="utf-8")
+        self.assertRaises(ValueError, lzma.open,
+                          TESTFN, "rb", errors="ignore")
+        self.assertRaises(ValueError, lzma.open,
+                          TESTFN, "rb", newline="\n")
 
     def test_format_and_filters(self):
         # Test non-default format and filter chain.
@@ -1099,15 +1098,14 @@ class MiscellaneousTestCase(unittest.TestCase):
         self.assertFalse(lzma.is_check_supported(lzma.CHECK_UNKNOWN))
 
     def test__encode_filter_properties(self):
-        with self.assertRaises(TypeError):
-            lzma._encode_filter_properties(b"not a dict")
-        with self.assertRaises(ValueError):
-            lzma._encode_filter_properties({"id": 0x100})
-        with self.assertRaises(ValueError):
-            lzma._encode_filter_properties({"id": lzma.FILTER_LZMA2, "junk": 12})
-        with self.assertRaises(lzma.LZMAError):
-            lzma._encode_filter_properties({"id": lzma.FILTER_DELTA,
-                                           "dist": 9001})
+        self.assertRaises(TypeError,  lzma._encode_filter_properties,
+                          b"not a dict")
+        self.assertRaises(ValueError, lzma._encode_filter_properties,
+                          {"id": 0x100})
+        self.assertRaises(ValueError, lzma._encode_filter_properties,
+                          {"id": lzma.FILTER_LZMA2, "junk": 12})
+        self.assertRaises(lzma.LZMAError, lzma._encode_filter_properties,
+                          {"id": lzma.FILTER_DELTA, "dist": 9001})
 
         # Test with parameters used by zipfile module.
         props = lzma._encode_filter_properties({
@@ -1120,10 +1118,10 @@ class MiscellaneousTestCase(unittest.TestCase):
         self.assertEqual(props, b"]\x00\x00\x80\x00")
 
     def test__decode_filter_properties(self):
-        with self.assertRaises(TypeError):
-            lzma._decode_filter_properties(lzma.FILTER_X86, {"should be": bytes})
-        with self.assertRaises(lzma.LZMAError):
-            lzma._decode_filter_properties(lzma.FILTER_DELTA, b"too long")
+        self.assertRaises(TypeError, lzma._decode_filter_properties,
+                          lzma.FILTER_X86, {"should be": bytes})
+        self.assertRaises(lzma.LZMAError,  lzma._decode_filter_properties,
+                          lzma.FILTER_DELTA, b"too long")
 
         # Test with parameters used by zipfile module.
         filterspec = lzma._decode_filter_properties(
