@@ -4,8 +4,8 @@ python:
 before_install:
   - sudo apt-get install xz-utils
 install:
-  - "$PYTHON setup.py install"
+  - "python setup.py install"
 before_script:
   - "cd test"
 script:
-  - "$PYTHON test_lzma.py"
+  - "python test_lzma.py"
