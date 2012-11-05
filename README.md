@@ -21,11 +21,11 @@ Supported Platforms
 ===================
 
 The 'lmza' module provided with Python 3.3 should work on all the
-main operating systems, so in theory so too should this backport.
+main operating systems, so in theory so too should this backport:
 
-Mac OS X: Tested under Python 3.1, 3.2 and 3.3
-Linux: Tested under Python 3.2 (so far)
-Windows: Untested (so far)
+* Mac OS X: Tested under Python 3.1, 3.2 and 3.3
+* Linux: Tested under Python 3.2 (so far)
+* Windows: Untested (so far)
 
 Support on Python 2.x would be nice to have too, but a lot more
 work.
