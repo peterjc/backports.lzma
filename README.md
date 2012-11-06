@@ -71,7 +71,7 @@ Usage
 =====
 
 The expected usage is as follows if you want to prioritise the
-standard library prodived lzma if present:
+standard library provided lzma if present:
 
     try:
         import lzma
