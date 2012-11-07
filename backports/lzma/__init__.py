@@ -21,7 +21,12 @@ __all__ = [
     "open", "compress", "decompress", "is_check_supported",
 ]
 
-import builtins
+try:
+    #Python 3
+    import builtins
+except ImportError:
+    #Python 2
+    builtins = __builtins__
 import io
 from ._lzma import *
 from ._lzma import _encode_filter_properties, _decode_filter_properties
@@ -46,7 +51,7 @@ class LZMAFile(io.BufferedIOBase):
     is returned as bytes, and data to be written must be given as bytes.
     """
 
-    def __init__(self, filename=None, mode="r", *,
+    def __init__(self, filename=None, mode="r",
                  format=None, check=-1, preset=None, filters=None):
         """Open an LZMA-compressed file in binary mode.
 
@@ -376,7 +381,7 @@ class LZMAFile(io.BufferedIOBase):
         return self._pos
 
 
-def open(filename, mode="rb", *,
+def open(filename, mode="rb",
          format=None, check=-1, preset=None, filters=None,
          encoding=None, errors=None, newline=None):
     """Open an LZMA-compressed file in binary or text mode.
