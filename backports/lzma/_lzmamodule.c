@@ -596,7 +596,13 @@ Compressor_compress(Compressor *self, PyObject *args)
     Py_buffer buffer;
     PyObject *result = NULL;
 
+#if PY_MAJOR_VERSION >= 3
+    //Type code 'y' for bytes on Python 3
     if (!PyArg_ParseTuple(args, "y*:compress", &buffer))
+#else
+    //Type code 's' for string on Python 2
+    if (!PyArg_ParseTuple(args, "s*:compress", &buffer))
+#endif
         return NULL;
 
     ACQUIRE_LOCK(self);
@@ -943,7 +949,13 @@ Decompressor_decompress(Decompressor *self, PyObject *args)
     Py_buffer buffer;
     PyObject *result = NULL;
 
+#if PY_MAJOR_VERSION >= 3  
+    //Type code 'y' for bytes on Python 3
     if (!PyArg_ParseTuple(args, "y*:decompress", &buffer))
+#else
+    //Type code 's' for string on Python 2
+    if (!PyArg_ParseTuple(args, "s*:decompress", &buffer))
+#endif
         return NULL;
 
     ACQUIRE_LOCK(self);
