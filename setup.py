@@ -1,6 +1,6 @@
 #!/usr/bin/python -u
 #
-# Python Bindings for XY/LZMA backported from Python 3.3.0
+# Python Bindings for XZ/LZMA backported from Python 3.3.0
 #
 # This file copyright (c) 2012 Peter Cock, p.j.a.cock@googlemail.com
 # See other files for separate copyright notices.
@@ -22,12 +22,12 @@ extens = [Extension('backports/lzma/_lzma',
                     library_dirs = [os.path.join(home, 'lib')]
                     )]
 
-descr = "Backport of Python 3.3's 'lzma' modoule for XY/LZMA compressed files."
+descr = "Backport of Python 3.3's 'lzma' modoule for XZ/LZMA compressed files."
 long_descr = """This is a backport of the 'lzma' module included in Python 3.3 or later
-by Nadeem Vawda and Per Oyvind Karlsen, which provides a Python wrapper for ZY Utils
+by Nadeem Vawda and Per Oyvind Karlsen, which provides a Python wrapper for XZ Utils
 (aka LZMA Utils v2) by Igor Pavlov.
 
-In order to compile this, you will need to install XY Utils from http://tukaani.org/xz/
+In order to compile this, you will need to install XZ Utils from http://tukaani.org/xz/
 """
 
 setup(

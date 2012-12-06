@@ -2,15 +2,15 @@ Introduction
 ============
 
 Python 3.3 onwards includes in the standard library module 'lzma',
-providing support for working with LZMA and XY compressed files via
-the XZ Utils C library (XY Utils is in a sense LZMA v2). See:
+providing support for working with LZMA and XZ compressed files via
+the XZ Utils C library (XZ Utils is in a sense LZMA v2). See:
 
 * Python's lzma - http://docs.python.org/dev/library/lzma.html
 * XZ Utils - http://tukaani.org/xz/
 
 There are some older Python libraries like PylibLZMA and PyLZMA
-but these are both using LZMA Utils (not XY Utils, so they have
-no XY support).
+but these are both using LZMA Utils (not XZ Utils, so they have
+no XZ support).
 
 * PylibLZMA - http://pypi.python.org/pypi/pyliblzma
 * PyLZMA - http://pypi.python.org/pypi/pylzma/
@@ -37,7 +37,7 @@ work.
 Installation
 ============
 
-First you must install the XY Utils C library, which on a Debian
+First you must install the XZ Utils C library, which on a Debian
 based Linux distribution can be done in one line:
 
     $ sudo apt-get install liblzma-dev
@@ -61,7 +61,7 @@ decompress the source code, or clone the github repository:
     $ cd test
     $ python3 test_lzma.py
 
-This should find the XY Util header file and library automatically
+This should find the XZ Util header file and library automatically
 (and will check for a local install under your home directory).
 You should now be able to import the backport from Python 3
 as shown below.
@@ -87,9 +87,9 @@ Note that while 'lzma' should be available on Python 3.3, you
 can still install the backport. This is useful for two reasons,
 first testing the two act the same way, and second it is possible
 that your Python installation lacks the standard library 'lzma'.
-This can happen if Python was installed from source and XY Utils
+This can happen if Python was installed from source and XZ Utils
 was not available. If this was a systems level Python install,
-as a user you could still install XY Utils and this backport
+as a user you could still install XZ Utils and this backport
 under your own account.
 
 This is using the shared 'backports' namespace introduced by Brandon
