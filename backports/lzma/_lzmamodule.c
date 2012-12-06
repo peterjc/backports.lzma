@@ -1306,8 +1306,15 @@ _decode_filter_properties(PyObject *self, PyObject *args)
     lzma_ret lzret;
     PyObject *result = NULL;
 
+#if PY_MAJOR_VERSION >= 3
+    /* Type code 'y' for bytes on Python 3 */
     if (!PyArg_ParseTuple(args, "O&y*:_decode_filter_properties",
                           lzma_vli_converter, &filter.id, &encoded_props))
+#else
+    /* Type code 's' for string on Python 2 */
+    if (!PyArg_ParseTuple(args, "O&s*:_decode_filter_properties",
+                          lzma_vli_converter, &filter.id, &encoded_props))
+#endif
         return NULL;
 
     lzret = lzma_properties_decode(
