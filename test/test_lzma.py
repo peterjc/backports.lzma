@@ -3,26 +3,30 @@ import os
 import random
 import unittest
 
-from test.support import (
-    _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
-)
+try:
+    # Try the location used on Python 3 first,
+    from test.support import _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
+except ImportError:
+    # Must be under Python 2 then,
+    from test.test_support import _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
 
-import sys
-if sys.version_info < (3,3):
-    #The API of bigmemtest changed in Python 3.3 so we can't use
-    #it as below, e.g. @bigmemtest(size=_4G + 100, memuse=2)
-    #Bit of a hack, but define a dummy decorator here instead,
-    #using the default size 5147 used in Python 3.3,
+import inspect
+if "size" not in inspect.getargspec(bigmemtest).args:
+    # The size aregument is new in Python 3.3 so we can't use
+    # it as below, e.g. @bigmemtest(size=_4G + 100, memuse=2)
+    # Bit of a hack, but define a dummy decorator here instead,
+    # using the default size 5147 used in Python 3.3,
     def bigmemtest(size, memuse, dry_run=True):
         def decorator(f):
             def wrapper(self):
                 return f(self, 5147)
             return wrapper
         return decorator
+    # TODO - Change the unittests to work with older bigmemtest?
 
-
-#The following style import doesn't work on Python 3.0,
-#lzma = import_module("backports.lzma")
+# The following style import doesn't work on Python 3.0,
+# from test.support import import_module
+# lzma = import_module("backports.lzma")
 from backports import lzma
 from backports.lzma import LZMACompressor, LZMADecompressor, LZMAError, LZMAFile
 
