@@ -3,10 +3,12 @@ import os
 import random
 import unittest
 
+from test.support import (
+    _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
+)
+
 import sys
 if sys.version_info < (3,3):
-    #Note test.support is not a stable API.
-
     #The API of bigmemtest changed in Python 3.3 so we can't use
     #it as below, e.g. @bigmemtest(size=_4G + 100, memuse=2)
     #Bit of a hack, but define a dummy decorator here instead,
@@ -17,38 +19,9 @@ if sys.version_info < (3,3):
                 return f(self, 5147)
             return wrapper
         return decorator
-else:
-    from test.support import bigmemtest
-
-if sys.version_info < (3,):
-    #Note test.support is new in Python 3
-
-    _4G = 0 #Only used as an argument to bigmemtest
-
-    #This is based on the Python 3.3 definition of TESTFN,
-    # Filename used for testing
-    if os.name == 'java':
-        # Jython disallows @ in module names
-        TESTFN = '$test'
-    else:
-        TESTFN = '@test'
-    # Disambiguate TESTFN for parallel testing, while letting it remain
-    # a valid module name.
-    TESTFN = "%s_%s_tmp" % (TESTFN, os.getpid())
-
-    def run_unittest(*classes):
-        #TODO, probably call unittest module directly...
-        pass
-
-    #The actual test.support.unlink function removes sister files too,
-    #not sure that is used below.
-    from os import unlink
-else:
-    from test.support import _4G, TESTFN, run_unittest, unlink
 
 
 #The following style import doesn't work on Python 3.0,
-#from test.support import import_module
 #lzma = import_module("backports.lzma")
 from backports import lzma
 from backports.lzma import LZMACompressor, LZMADecompressor, LZMAError, LZMAFile
