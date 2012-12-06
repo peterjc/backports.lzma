@@ -71,12 +71,17 @@ PyObject *
 _PyUnicode_FromId(_Py_Identifier *id)
 {
   if (!id->object) {
+#if PY_MAJOR_VERSION < 3
+    /* A bit of guess work here... */
+    PyString_InternInPlace(&id->object);
+#else
     id->object = PyUnicode_DecodeUTF8Stateful(id->string,
 					      strlen(id->string),
 					      NULL, NULL);
     if (!id->object)
       return NULL;
     PyUnicode_InternInPlace(&id->object);
+#endif
     assert(!id->next);
     id->next = static_strings;
     static_strings = id;
@@ -1270,6 +1275,7 @@ static PyMethodDef module_methods[] = {
     {NULL}
 };
 
+#if PY_MAJOR_VERSION >= 3
 static PyModuleDef _lzmamodule = {
     PyModuleDef_HEAD_INIT,
     "_lzma",
@@ -1281,6 +1287,7 @@ static PyModuleDef _lzmamodule = {
     NULL,
     NULL,
 };
+#endif
 
 /* Some of our constants are more than 32 bits wide, so PyModule_AddIntConstant
    would not work correctly on platforms with 32-bit longs. */
@@ -1299,6 +1306,10 @@ module_add_int_constant(PyObject *m, const char *name, PY_LONG_LONG value)
 #define ADD_INT_PREFIX_MACRO(m, macro) \
     module_add_int_constant(m, #macro, LZMA_ ## macro)
 
+
+#if PY_MAJOR_VERSION >= 3
+/* Python 3 module definition */
+
 PyMODINIT_FUNC
 PyInit__lzma(void)
 {
@@ -1310,7 +1321,20 @@ PyInit__lzma(void)
 
     m = PyModule_Create(&_lzmamodule);
     if (m == NULL)
-        return NULL;
+      return NULL;
+
+#else
+/* Python 2 module defnition */
+
+PyMODINIT_FUNC
+init_lzma(void)
+{
+     PyObject *m;
+     m = Py_InitModule3("_lzma", module_methods, NULL);
+     if (m == NULL)
+       return;
+
+#endif
 
     if (PyModule_AddIntMacro(m, FORMAT_AUTO) == -1 ||
         PyModule_AddIntMacro(m, FORMAT_XZ) == -1 ||
@@ -1340,29 +1364,64 @@ PyInit__lzma(void)
         ADD_INT_PREFIX_MACRO(m, MODE_NORMAL) == -1 ||
         ADD_INT_PREFIX_MACRO(m, PRESET_DEFAULT) == -1 ||
         ADD_INT_PREFIX_MACRO(m, PRESET_EXTREME) == -1)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
 
     Error = PyErr_NewExceptionWithDoc(
             "_lzma.LZMAError", "Call to liblzma failed.", NULL, NULL);
     if (Error == NULL)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
+
     Py_INCREF(Error);
     if (PyModule_AddObject(m, "LZMAError", Error) == -1)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
 
     if (PyType_Ready(&Compressor_type) == -1)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
+
     Py_INCREF(&Compressor_type);
     if (PyModule_AddObject(m, "LZMACompressor",
                            (PyObject *)&Compressor_type) == -1)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
 
     if (PyType_Ready(&Decompressor_type) == -1)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
+
     Py_INCREF(&Decompressor_type);
     if (PyModule_AddObject(m, "LZMADecompressor",
                            (PyObject *)&Decompressor_type) == -1)
+#if PY_MAJOR_VERSION >= 3
         return NULL;
+#else
+        return;
+#endif
 
+#if PY_MAJOR_VERSION >= 3
+    /* Python 3 module definition must return m */
     return m;
+#endif
+
 }
