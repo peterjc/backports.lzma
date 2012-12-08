@@ -101,6 +101,7 @@ and http://bitbucket.org/brandon/backports
 Automated Testing
 =================
 
-TravisCI is being used for continuous integration testing under
-32-bit Linux, currently only for Python 3.2, see:
-https://travis-ci.org/peterjc/backports.lzma
+TravisCI is being used for continuous integration testing under 32-bit
+Linux, see https://travis-ci.org/peterjc/backports.lzma
+
+[![Build Status](https://secure.travis-ci.org/peterjc/backports.lzma.png?branch=master)](https://travis-ci.org/peterjc/backports.lzma)
