@@ -30,8 +30,9 @@ main operating systems, so in theory so too should this backport:
 Other than some minor changes in the exceptions for some errors,
 based on the unit tests everything seems to be working fine.
 
-Support on Python 2.x would be nice to have too, but a lot more
-work.
+Support under Python 2.6 and 2.7 is in progress (it now compiles but
+still plenty of test failires).  Supporting older verions of Python 2
+is probably going to be too much work.
 
 
 Installation
