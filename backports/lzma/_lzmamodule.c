@@ -15,13 +15,20 @@
 #include "pythread.h"
 #endif
 
+#include "pyerrors.h"
 #ifndef PyErr_NewExceptionWithDoc
-/* Python 3.2 added this.
-   Copied from Python-3.2.3/Python/errors.c
-*/
+/* Python 2.7 and 3.2 added this. */
+#if PY_MAJOR_VERSION >= 3
+/* Copied from Python-3.2.3/Python/errors.c */
 PyObject *
 PyErr_NewExceptionWithDoc(const char *name, const char *doc,
                           PyObject *base, PyObject *dict)
+#else
+/* Python 2.7 didn't use const for name and doc */
+PyObject *
+PyErr_NewExceptionWithDoc(char *name, char *doc,
+			  PyObject *base, PyObject *dict)
+#endif
 {
   int result;
   PyObject *ret = NULL;
