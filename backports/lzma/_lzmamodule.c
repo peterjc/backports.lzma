@@ -421,8 +421,10 @@ parse_filter_spec(lzma_filter *f, PyObject *spec)
         f->id = (unsigned PY_LONG_LONG)PyInt_AsLong(id_obj);
     else if (PyLong_Check(id_obj))
         f->id = PyLong_AsUnsignedLongLong(id_obj);
-    else
+    else {
+        Py_DECREF(id_obj);
         return NULL;
+    };
 #endif
     Py_DECREF(id_obj);
     if (PyErr_Occurred())
