@@ -414,7 +414,16 @@ parse_filter_spec(lzma_filter *f, PyObject *spec)
                             "Filter specifier must have an \"id\" entry");
         return NULL;
     }
+#if PY_MAJOR_VERSION >= 3
     f->id = PyLong_AsUnsignedLongLong(id_obj);
+#else
+    if (PyInt_Check(id_obj))
+        f->id = (unsigned PY_LONG_LONG)PyInt_AsLong(id_obj);
+    else if (PyLong_Check(id_obj))
+        f->id = PyLong_AsUnsignedLongLong(id_obj);
+    else
+        return NULL;
+#endif
     Py_DECREF(id_obj);
     if (PyErr_Occurred())
         return NULL;
@@ -1036,7 +1045,16 @@ Decompressor_init(Decompressor *self, PyObject *args, PyObject *kwargs)
                             "Cannot specify memory limit with FORMAT_RAW");
             return -1;
         }
+#if PY_MAJOR_VERSION >= 3
         memlimit = PyLong_AsUnsignedLongLong(memlimit_obj);
+#else
+        if (PyInt_Check(memlimit_obj))
+            memlimit = (unsigned PY_LONG_LONG)PyInt_AsLong(memlimit_obj);
+        else if (PyLong_Check(memlimit_obj))
+            memlimit = PyLong_AsUnsignedLongLong(memlimit_obj);
+        else
+            return -1;
+#endif
         if (PyErr_Occurred())
             return -1;
     }
