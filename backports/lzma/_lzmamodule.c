@@ -240,6 +240,7 @@ grow_buffer(PyObject **buf)
       to be strictly correct, we need to define two separate converters.
  */
 
+#if PY_MAJOR_VERSION >= 3
 #define INT_TYPE_CONVERTER_FUNC(TYPE, FUNCNAME) \
     static int \
     FUNCNAME(PyObject *obj, void *ptr) \
@@ -257,6 +258,28 @@ grow_buffer(PyObject **buf)
         *(TYPE *)ptr = (TYPE)val; \
         return 1; \
     }
+#else
+/* Python 2 worries about int versus long */
+#define INT_TYPE_CONVERTER_FUNC(TYPE, FUNCNAME) \
+    static int \
+    FUNCNAME(PyObject *obj, void *ptr) \
+    { \
+        unsigned PY_LONG_LONG val; \
+        \
+        if (PyInt_Check(obj)) val = (unsigned PY_LONG_LONG)PyInt_AsLong(obj); \
+        else if (PyLong_Check(obj)) val = PyLong_AsUnsignedLongLong(obj); \
+        else return 0; \
+        if (PyErr_Occurred()) \
+            return 0; \
+        if ((unsigned PY_LONG_LONG)(TYPE)val != val) { \
+            PyErr_SetString(PyExc_OverflowError, \
+                            "Value too large for " #TYPE " type"); \
+            return 0; \
+        } \
+        *(TYPE *)ptr = (TYPE)val; \
+        return 1; \
+    }
+#endif
 
 INT_TYPE_CONVERTER_FUNC(uint32_t, uint32_converter)
 INT_TYPE_CONVERTER_FUNC(lzma_vli, lzma_vli_converter)
