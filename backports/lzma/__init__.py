@@ -26,7 +26,7 @@ try:
     import builtins
 except ImportError:
     #Python 2
-    builtins = __builtins__
+    import __builtin__ as builtins
 import io
 from ._lzma import *
 from ._lzma import _encode_filter_properties, _decode_filter_properties
