@@ -457,18 +457,13 @@ class FileTestCase(unittest.TestCase):
                           BytesIO(), "w", preset=10)
         self.assertRaises(LZMAError, LZMAFile,
                           BytesIO(), "w", preset=23)
-        if sys.version_info < (3,1):
-            #Under Python 3.0 get:
-            #TypeError: can't convert negative int to unsigned
-            self.assertRaises(TypeError, LZMAFile,
+        #Under Python 3.0 get:
+        #TypeError: can't convert negative int to unsigned
+        self.assertRaises((OverflowError, TypeError), LZMAFile,
                           BytesIO(), "w", preset=-1)
-            self.assertRaises(TypeError, LZMAFile,
-                              BytesIO(), "w", preset=-7)
-        else:
-            self.assertRaises(OverflowError, LZMAFile,
-                              BytesIO(), "w", preset=-1)
-            self.assertRaises(OverflowError, LZMAFile,
-                              BytesIO(), "w", preset=-7)
+        self.assertRaises((OverflowError, TypeError), LZMAFile,
+                          BytesIO(), "w", preset=-7)
+
         self.assertRaises((TypeError, SystemError), LZMAFile,
                           BytesIO(), "w", preset="foo")
         # Cannot specify a preset with mode="r".
