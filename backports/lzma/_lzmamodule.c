@@ -167,7 +167,7 @@ typedef struct {
 static PyObject *Error;
 
 /* An empty tuple, used by the filter specifier parsing code. */
-static PyObject *empty_tuple;
+static PyObject *empty_tuple = NULL;
 
 
 /* Helper functions. */
@@ -1392,6 +1392,11 @@ PyMODINIT_FUNC
 init_lzma(void)
 {
      PyObject *m;
+
+     empty_tuple = PyTuple_New(0);
+     if (empty_tuple == NULL)
+        return;
+
      m = Py_InitModule3("_lzma", module_methods, NULL);
      if (m == NULL)
        return;
