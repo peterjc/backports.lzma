@@ -283,6 +283,10 @@ class LZMAFile(io.BufferedIOBase):
         Returns b"" if the file is already at EOF.
         """
         self._check_can_read()
+        if size is None:
+            #This is not needed on Python 3 where the comparison to zeo
+            #will fail with a TypeError.
+            raise TypeError("Read size should be an integer, not None")
         if self._mode == _MODE_READ_EOF or size == 0:
             return b""
         elif size < 0:
@@ -300,6 +304,10 @@ class LZMAFile(io.BufferedIOBase):
         # this does not give enough data for the decompressor to make progress.
         # In this case we make multiple reads, to avoid returning b"".
         self._check_can_read()
+        if size is None:
+            #This is not needed on Python 3 where the comparison to zero
+            #will fail with a TypeError. 
+            raise TypeError("Read size should be an integer, not None")
         if (size == 0 or self._mode == _MODE_READ_EOF or
             not self._fill_buffer()):
             return b""
