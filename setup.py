@@ -30,6 +30,12 @@ by Nadeem Vawda and Per Oyvind Karlsen, which provides a Python wrapper for XZ U
 In order to compile this, you will need to install XZ Utils from http://tukaani.org/xz/
 """
 
+if sys.version_info < (2,6):
+    sys.stderr.write("ERROR: Python 2.5 and older are not supported, and probably never will be.\n")
+    sys.exit(1)
+elif sys.version_info < (3,):
+    sys.stderr.write("WARNING: Support for Python 2.6 and 2.7 is incomplete and not yet usable.\n")
+
 setup(
     name = "backports.lzma",
     version = "0.0.1",
