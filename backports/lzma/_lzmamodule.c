@@ -80,6 +80,8 @@ _PyUnicode_FromId(_Py_Identifier *id)
   if (!id->object) {
 #if PY_MAJOR_VERSION < 3
     /* A bit of guess work here... */
+    if (!id->object)
+      return NULL;
     PyString_InternInPlace(&id->object);
 #else
     id->object = PyUnicode_DecodeUTF8Stateful(id->string,
