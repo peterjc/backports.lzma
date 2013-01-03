@@ -364,6 +364,10 @@ class LZMAFile(io.BufferedIOBase):
             raise ValueError("Invalid value for whence: {}".format(whence))
 
         # Make it so that offset is the number of bytes to skip forward.
+        if offset is None:
+            #This is not needed on Python 3 where the comparison to self._pos
+            #will fail with a TypeError.
+            raise TypeError("Seek offset should be an integer, not None")
         if offset < self._pos:
             self._rewind()
         else:
