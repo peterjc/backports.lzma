@@ -891,7 +891,11 @@ class FileTestCase(unittest.TestCase):
             self.assertRaises(ValueError, f.write, b"bar")
         with LZMAFile(BytesIO(), "w") as f:
             self.assertRaises(TypeError, f.write, None)
-            self.assertRaises(TypeError, f.write, "text")
+            if sys.version_info < (3,):
+                #Should we allow both byte-strings and unicode?
+                pass
+            else:
+                self.assertRaises(TypeError, f.write, "text")
             self.assertRaises(TypeError, f.write, 789)
 
     def test_writelines(self):
