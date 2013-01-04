@@ -510,7 +510,12 @@ spec_add_field(PyObject *spec, _Py_Identifier *key, unsigned PY_LONG_LONG value)
     if (value_object == NULL)
         return -1;
 
+#if PY_MAJOR_VERSION >= 3
     status = _PyDict_SetItemId(spec, key, value_object);
+#else
+    /* TODO - Is there some bytes vs unicode confusion here? */
+    status = PyDict_SetItemString(spec, key->string, value_object);
+#endif
     Py_DECREF(value_object);
     return status;
 }
