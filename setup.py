@@ -36,7 +36,7 @@ if sys.version_info < (2,6):
 
 setup(
     name = "backports.lzma",
-    version = "0.0.1",
+    version = "0.0.1b",
     description = descr,
     author = "Peter Cock, based on work by Nadeem Vawda and Per Oyvind Karlsen",
     author_email = "p.j.a.cock@googlemail.com",
@@ -46,6 +46,7 @@ setup(
     long_description = long_descr,
     classifiers = [
         #'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
