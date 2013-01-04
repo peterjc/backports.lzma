@@ -114,6 +114,21 @@ Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
 
 
+Bug Reports
+===========
+
+Please report any reproducible bugs via the GitHub issue tracker at
+https://github.com/peterjc/backports.lzma/issues including details
+about your operating system, version of Python, XY Utils, the lzma
+backport etc. Reproducible test cases are particularly helpful.
+
+If you can demonstrate a problem in this backport but not in the
+'lzma' module included with Python 3.3 or later, then it is clearly
+something we will need to fix. Any issues in the 'lzma' module as
+bundled with Python 3.3 or later should be reported to the Python 
+project at http://bugs.python.org instead.
+
+
 Automated Testing
 =================
 
