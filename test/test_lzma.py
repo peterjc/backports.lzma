@@ -38,7 +38,10 @@ class CompressorDecompressorTestCase(unittest.TestCase):
 
     def test_simple_bad_args(self):
         self.assertRaises(TypeError, LZMACompressor, [])
-        self.assertRaises(TypeError, LZMACompressor, format=3.45)
+        if sys.version_info >= (2,7):
+            # Under Python 2.6 the float format would be automatically
+            # truncated into an integer and a deprecation warning issued.
+            self.assertRaises(TypeError, LZMACompressor, format=3.45)
         self.assertRaises(TypeError, LZMACompressor, check="")
         self.assertRaises((TypeError, SystemError), LZMACompressor, preset="asdf")
         self.assertRaises(TypeError, LZMACompressor, filters=3)
