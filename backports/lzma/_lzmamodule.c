@@ -3,7 +3,7 @@
    Initial implementation by Per Øyvind Karlsen.
    Rewritten by Nadeem Vawda.
 
-   Modifications to support Python 3.1 and 3.2 by Peter Cock.
+   Modifications to support Python 2.6, 2.7 and 3.0, 3.1 and 3.2 by Peter Cock.
 
 */
 
