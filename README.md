@@ -26,16 +26,16 @@ Supported Platforms
 The 'lmza' module provided with Python 3.3 should work on all the
 main operating systems, so in theory so too should this backport:
 
-* Mac OS X: Tested under Python 3.0, 3.1, 3.2 and 3.3
-* Linux: Tested under Python 3.0, 3.1, 3.2 and 3.3
+* Mac OS X: Tested under Python 2.6, 2.7, 3.0, 3.1, 3.2 and 3.3
+* Linux: Tested under Python 2.6, 2.7, 3.0, 3.1, 3.2 and 3.3
 * Windows: Untested (so far)
 
 Other than some minor changes in the exceptions for some errors,
 based on the unit tests everything seems to be working fine.
 
-Support under Python 2.6 and 2.7 is in progress (it compiles but there
-are still some test failures).  Supporting older verions of Python 2
-is probably going to be too much work.
+Support under Python 2.6 and 2.7 appears to be working in that all
+the appropriate unit tests now pass. Supporting older verions of
+Python 2 is probably going to be too much work.
 
 
 Installation
@@ -61,9 +61,13 @@ decompress the source code, or clone the github repository:
 
     $ git clone git://github.com/peterjc/backports.lzma.git
     $ cd backports.lzma
-    $ python3 setup.py install
+    $ python setup.py install
     $ cd test
-    $ python3 test_lzma.py
+    $ python test_lzma.py
+
+To install for a specific version of Python, replace `python` (which
+will use the system's default Python) in the above with a specific
+version like `python2`, `python2.6` or `python3`, `python3.2`, etc.
 
 This should find the XZ Util header file and library automatically
 (and will check for a local install under your home directory).
