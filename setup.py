@@ -40,6 +40,7 @@ setup(
     description = descr,
     author = "Peter Cock, based on work by Nadeem Vawda and Per Oyvind Karlsen",
     author_email = "p.j.a.cock@googlemail.com",
+    url = "https://github.com/peterjc/backports.lzma",
     license='3-clause BSD License',
     keywords = "xy lzma compression decompression",
     long_description = long_descr,
