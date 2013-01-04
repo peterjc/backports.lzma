@@ -64,7 +64,7 @@ PyErr_NewExceptionWithDoc(char *name, char *doc,
   definitions here seems to be enough for this to compile on Python 3.2
 */
 
-/* From Pythnon-3.3.0/Include/object.h */
+/* From Python-3.3.0/Include/object.h */
 typedef struct _Py_Identifier {
   struct _Py_Identifier *next;
   const char* string;
@@ -72,7 +72,7 @@ typedef struct _Py_Identifier {
 } _Py_Identifier;
 #define _Py_static_string(varname, value)  static _Py_Identifier varname = { 0, value, 0 }
 #define _Py_IDENTIFIER(varname) _Py_static_string(PyId_##varname, #varname)
-/* From Pythnon-3.3.0/Objects/unicodeobject.c */
+/* From Python-3.3.0/Objects/unicodeobject.c */
 static _Py_Identifier *static_strings;
 PyObject *
 _PyUnicode_FromId(_Py_Identifier *id)
@@ -97,7 +97,7 @@ _PyUnicode_FromId(_Py_Identifier *id)
   }
   return id->object;
 }
-/* From Pythnon-3.3.0/Objects/typeobject.c */
+/* From Python-3.3.0/Objects/typeobject.c */
 int
 _PyDict_SetItemId(PyObject *v, struct _Py_Identifier *key, PyObject *item)
 {
