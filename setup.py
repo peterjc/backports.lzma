@@ -40,7 +40,7 @@ setup(
     description = descr,
     author = "Peter Cock, based on work by Nadeem Vawda and Per Oyvind Karlsen",
     author_email = "p.j.a.cock@googlemail.com",
-    license='PSF license',
+    license='3-clause BSD License',
     keywords = "xy lzma compression decompression",
     long_description = long_descr,
     classifiers = [
@@ -49,7 +49,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: PSF license',
+        'License :: OSI Approved :: BSD License',
         #'Operating System :: OS Independent',
     ],
     packages = packages,
