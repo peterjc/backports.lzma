@@ -8,8 +8,12 @@ the XZ Utils C library (XZ Utils is in a sense LZMA v2). See:
 * Python's lzma - http://docs.python.org/dev/library/lzma.html
 * XZ Utils - http://tukaani.org/xz/
 
-This code is a backport of standard library module 'lzma' for use
-on older versions of Python where it was not included.
+This code is a backport of the Python 3.3 standard library module 'lzma'
+for use on older versions of Python where it was not included. It is
+available from PyPI (released downloads only) and GitHub (repository):
+
+ * PyPI - http://pypi.python.org/pypi/backports.lzma/
+ * GitHub - https://github.com/peterjc/backports.lzma
 
 There are some older Python libraries like PylibLZMA and PyLZMA
 but these are both using LZMA Utils (not XZ Utils, so they have
