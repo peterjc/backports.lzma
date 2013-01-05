@@ -36,7 +36,7 @@ extens = [Extension('backports/lzma/_lzma',
                     library_dirs = [os.path.join(home, 'lib')]
                     )]
 
-descr = "Backport of Python 3.3's 'lzma' modoule for XZ/LZMA compressed files."
+descr = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files."
 long_descr = """This is a backport of the 'lzma' module included in Python 3.3 or later
 by Nadeem Vawda and Per Oyvind Karlsen, which provides a Python wrapper for XZ Utils
 (aka LZMA Utils v2) by Igor Pavlov.
