@@ -449,7 +449,8 @@ parse_filter_spec(lzma_filter *f, PyObject *spec)
             f->options = parse_filter_spec_bcj(spec);
             return f->options;
         default:
-            PyErr_Format(PyExc_ValueError, "Invalid filter ID: %llu", f->id);
+            PyErr_Format(PyExc_ValueError,
+                         "Invalid filter ID: %llu", (unsigned PY_LONG_LONG)f->id);
             return NULL;
     }
 }
@@ -571,7 +572,8 @@ build_filter_spec(const lzma_filter *f)
             break;
         }
         default:
-            PyErr_Format(PyExc_ValueError, "Invalid filter ID: %llu", f->id);
+            PyErr_Format(PyExc_ValueError,
+                         "Invalid filter ID: %llu", (unsigned PY_LONG_LONG)f->id);
             goto error;
     }
 
