@@ -21,6 +21,7 @@ This work is based heavily on reading the XZ file format specification,
 http://tukaani.org/xz/format.html
 """
 
+import sys
 import os
 import struct
 try:
@@ -58,8 +59,6 @@ def crc32(bytes):
 
 from io import BytesIO
 
-from Bio._py3k import _as_bytes, _as_string
-
 _stream_header_magic = b"\xfd7zXZ\x00"
 _stream_footer_magic = b"YZ"
 _empty_bytes_string = b""
@@ -68,23 +67,47 @@ _null = b"\0"
 class CheckSumError(ValueError):
     pass
 
-def _encode_variable_int(value):
-    """
-    Based on the C function decode given in the XZ specification.
-    Essentially this uses base 128 (i.e. 2**7), with the top bit
-    set to indicate another byte/digit is required, giving the
-    least significant digit/byte first.
-    """
-    if value > 2**63:
-        raise OverflowError(value)
+#Simpler and faster to have two versions of this (Python 2 and 3)
+if sys.version_info[0] == 2:
+    def _encode_variable_int(value):
+        """Format an integer using XZ variable length encoding.
 
-    answer = _empty_bytes_string
-    while (value >= 0x80):
-        answer += _as_bytes(chr( (value % 128) | 0x80))
-        value >>= 7
-    answer += _as_bytes(chr(value % 128))
-    return answer
-assert _encode_variable_int(7) == _as_bytes("\x07")
+        Based on the C function decode given in the XZ specification.
+        Essentially this uses base 128 (i.e. 2**7), with the top bit
+        set to indicate another byte/digit is required, giving the
+        least significant digit/byte first.
+        """
+        if value > 2**63:
+            raise OverflowError(value)
+
+        answer = _empty_bytes_string
+        while (value >= 0x80):
+            answer += chr( (value % 128) | 0x80)
+            value >>= 7
+        answer += chr(value % 128)
+        return answer
+else:
+    #Python 3 or later
+    def _encode_variable_int(value):
+        """Format an integer using XZ variable length encoding.
+
+        Based on the C function decode given in the XZ specification.
+        Essentially this uses base 128 (i.e. 2**7), with the top bit
+        set to indicate another byte/digit is required, giving the
+        least significant digit/byte first.
+        """
+        if value > 2**63:
+            raise OverflowError(value)
+
+        answer = []
+        while (value >= 0x80):
+            answer.append( (value % 128) | 0x80)
+            value >>= 7
+        answer.append(value % 128)
+        return bytes(answer)
+
+assert _encode_variable_int(7) == b"\x07", \
+    "_encode_variable_int(7) --> %r" % _encode_variable_int(7)
 
 def _decompress_block(block_with_check, uncomp_size):
     check = b"\x00\x04"
@@ -94,7 +117,7 @@ def _decompress_block(block_with_check, uncomp_size):
     print("Striped block from %i to just %i" % (len(block_with_check), len(block)))
     print("Generating dummy index for one block %r length %i, uncomp len %i" % (block, len(block), uncomp_size))
     #Variable encoding of one (1 block) is 0x1,
-    dummy_index = _null + _as_bytes("\x01") \
+    dummy_index = _null + b"\x01" \
         + _encode_variable_int(len(block)) \
         + _encode_variable_int(uncomp_size)
     pad = len(dummy_index) % 4
