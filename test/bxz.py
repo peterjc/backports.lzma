@@ -572,8 +572,8 @@ class XzReader(object):
                 #Overshot!
                 i -= 1
                 break
-        print("Seeking to %i --> block %i, on disk from %i to %i, covering %i to %i decompressed." \
-              % (offset, i, self._index[i][0], self._index[i+1][0], self._index[i][1], self._index[i+1][1]))
+        #print("Seeking to %i --> block %i, on disk from %i to %i, covering %i to %i decompressed." \
+        #      % (offset, i, self._index[i][0], self._index[i+1][0], self._index[i][1], self._index[i+1][1]))
         self._load_block(i)
         self._within_block_offset = offset - self._index[i][1]
         return offset
@@ -581,7 +581,7 @@ class XzReader(object):
     def _load_block(self, block_number=None):
         if block_number is None:
             block_number = self._block + 1
-        print("Loading block %i" % block_number)
+        #print("Loading block %i" % block_number)
         if block_number+1 == len(self._index):
             #End of file!
             self._buffer = _empty_bytes_string
@@ -611,20 +611,21 @@ class XzReader(object):
         else:
             pad = 0
         #Unpadded Size is the size of the Block Header, Compressed Data, and Check fields.
-        #TODO - Set check size according to checksum being used, here 8 for CRC64
-        data = self._handle.read(block_size - block_header_len - 8 + pad)
-        print("Loading block %i, raw size on disk was %i (plus %i pad, less %i header)" % (block_number, block_size, pad, block_header_len))
-        #print("Loading block %i, raw is %r" % (block_number, data))
+        crc_width = _checksum__width(self._checksum)
+        data = self._handle.read(block_size - block_header_len - crc_width + pad)
+        #print("Loading block %i, raw size on disk was %i (plus %i pad, less %i header)" \
+        #      % (block_number, block_size, pad, block_header_len))
         if pad:
             assert data[-pad:] == _null * pad, "Block ends %r but expected %i null padding" % (data[-pad:], pad)
-        print("Decompressing block %i, using %i bytes, filters %r" % (block_number, len(data), filters))
+        #print("Decompressing block %i, using %i bytes, filters %r" % (block_number, len(data), filters))
         data = _decompress(data, format=FORMAT_RAW, filters=filters)
         #data = _decompress(self._magic + data + self._magic_foot, format=FORMAT_XY)
         #data = _decompress(self._magic + data, format=FORMAT_XY)
         #data = _decompress(data, format=FORMAT_RAW, filters=None)
-        #data = _decompress_block(data, uncomp_size)
+        #data = _decompress_block(data, self._checksum, uncomp_size)
         #print("Block starts: %r" % data[:100])
         assert len(data) == self._index[block_number+1][1] - self._index[block_number][1]
+        #TODO - Verify the block's CRC
         self._block = block_number
         self._buffer = data
         self._buffers[block_number] = data
