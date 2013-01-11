@@ -61,10 +61,10 @@ from io import BytesIO
 
 from Bio._py3k import _as_bytes, _as_string
 
-_stream_header_magic = _as_bytes("\xfd7zXZ\x00")
-_stream_footer_magic = _as_bytes("YZ")
-_empty_bytes_string = _as_bytes("")
-_null = _as_bytes("\0")
+_stream_header_magic = b"\xfd7zXZ\x00"
+_stream_footer_magic = b"YZ"
+_empty_bytes_string = b""
+_null = b"\0"
 
 class CheckSumError(ValueError):
     pass
@@ -88,7 +88,7 @@ def _encode_variable_int(value):
 assert _encode_variable_int(7) == _as_bytes("\x07")
 
 def _decompress_block(block_with_check, uncomp_size):
-    check = _as_bytes("\x00\x04")
+    check = b"\x00\x04"
     #Strip the checksum (assume 3 bytes)
     #block = block_with_check[:29]
     block = block_with_check[:-3].rstrip(_null)
@@ -172,12 +172,12 @@ def _get_variable_int(handle):
     return i+1, value
 
 #Quick self test:
-assert (1, 7) == _get_variable_int(BytesIO(_as_bytes('\x07')))
-assert (3, 1024**2) == _get_variable_int(BytesIO(_as_bytes('\x80\x80@')))
+assert (1, 7) == _get_variable_int(BytesIO(b'\x07'))
+assert (3, 1024**2) == _get_variable_int(BytesIO(b'\x80\x80@'))
 
-assert (1, 7) == _parse_variable_int(_as_bytes('\x07'))
-assert (3, 1024**2) == _parse_variable_int(_as_bytes('\x80\x80@'))
-assert _encode_variable_int(1024**2) == _as_bytes("\x80\x80@")
+assert (1, 7) == _parse_variable_int(b'\x07')
+assert (3, 1024**2) == _parse_variable_int(b'\x80\x80@')
+assert _encode_variable_int(1024**2) == b"\x80\x80@"
 
 
 
@@ -474,7 +474,7 @@ class XzReader(object):
         self._buffers = {}
         handle.seek(0)
         self._magic = handle.read(12)
-        self._magic_foot = _null*8 + self._magic[6:8] + _as_bytes('YZ')
+        self._magic_foot = _null*8 + self._magic[6:8] + b'YZ'
         handle.seek(0)
         self._index, streams, max_block = _load_index(handle)
         if max_block > max_block_size:
