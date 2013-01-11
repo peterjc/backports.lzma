@@ -114,8 +114,8 @@ def _decompress_block(block_with_check, uncomp_size):
     #Strip the checksum (assume 3 bytes)
     #block = block_with_check[:29]
     block = block_with_check[:-3].rstrip(_null)
-    print("Striped block from %i to just %i" % (len(block_with_check), len(block)))
-    print("Generating dummy index for one block %r length %i, uncomp len %i" % (block, len(block), uncomp_size))
+    #print("Striped block from %i to just %i" % (len(block_with_check), len(block)))
+    #print("Generating dummy index for one block %r length %i, uncomp len %i" % (block, len(block), uncomp_size))
     #Variable encoding of one (1 block) is 0x1,
     dummy_index = _null + b"\x01" \
         + _encode_variable_int(len(block)) \
@@ -136,14 +136,14 @@ def _decompress_block(block_with_check, uncomp_size):
     #    block += _null * (4 - pad)
     assert len(block_with_check) % 4 == 0, len(block_with_check) % 4
 
-    print("Adding index %r and %r footer" % (dummy_index, dummy_footer))
+    #print("Adding index %r and %r footer" % (dummy_index, dummy_footer))
     block = dummy_head + block_with_check + dummy_index + dummy_footer
-    print("Attempting to decompressed %r (dummy stream)" % block)
+    #print("Attempting to decompressed %r (dummy stream)" % block)
     block = _decompress(block)
     assert len(block) == uncomp_size
-    print("Worked, got %r back" % block)
+    #print("Worked, got %r back" % block)
     return block
-#assert b"Hello" == _decompress_block(b'\x02\x00!\x01\x16\x00\x00\x00t/\xe5\xa3\x01\x00\x04Hello\x00\x00\x00\x00\xc8\xac{\xc8;\\\xcfQ', 5)
+assert b"Hello" == _decompress_block(b'\x02\x00!\x01\x16\x00\x00\x00t/\xe5\xa3\x01\x00\x04Hello\x00\x00\x00\x00\xc8\xac{\xc8;\\\xcfQ', 5)
 
 def _parse_variable_int(buffer, offset=0):
     """Read variable length encoded integer from buffer.
@@ -456,9 +456,10 @@ def _load_index(h, size=None):
         #jump in block_start gives the (padded) block size by including
         #dummy entries where we have a stream end/start?
     blocks.append((size, total_uncompressed, 0))
-    print("End", size, total_uncompressed)
+    #print("End", size, total_uncompressed)
     assert total_uncompressed == total_uncomp_size
     return blocks, stream_count, max_uncomp_block
+
 #import lzma
 #_hello = lzma.compress(b"Hello")
 _hello = b'\xfd7zXZ\x00\x00\x04\xe6\xd6\xb4F\x02\x00!\x01\x16\x00\x00\x00t/\xe5\xa3\x01\x00\x04Hello\x00\x00\x00\x00\xc8\xac{\xc8;\\\xcfQ\x00\x01\x1d\x05\xb8-\x80\xaf\x1f\xb6\xf3}\x01\x00\x00\x00\x00\x04YZ'
@@ -645,32 +646,32 @@ class XzReader(object):
     def fileno(self):
         return self._handle.fileno()
 
-
-for f in ["../maf/chr19_gl000208_random.maf.xz",
-          "../maf/chr19_gl000208_random.maf.b1k.xz",
-          "../maf/chr19_gl000209_random.maf.xz",
-          "../maf/chr19_gl000209_random.maf.b10k.xz",
-          "../maf/chrY.maf.xz",
-          "../maf/chrY.maf.b1M.xz",
-          "thousand_blastx_nr.xml.xz",
-          "thousand_blastx_nr.xml.s1M.xz",
-          "thousand_blastx_nr.xml.b1M.xz"]:
-    print("="*78)
-    print(f)
-    #h = open(f, "rb")
-    #blocks = _load_index(h)
-    try:
-        h = XzReader(f, max_block_size=1048576)
-    except ValueError as e:
-        print(e)
-        continue
-    assert 2000 == h.seek(2000)
-    if len(h._index) > 3:
-        print(h._index[0])
-        print(h._index[1])
-        print("...")
-        print(h._index[-1])
-    print(h.read(100))
-    print("Done")
-    h.close()
-    print("")
+if __name__ == "__main__":
+    for f in ["../maf/chr19_gl000208_random.maf.xz",
+              "../maf/chr19_gl000208_random.maf.b1k.xz",
+              "../maf/chr19_gl000209_random.maf.xz",
+              "../maf/chr19_gl000209_random.maf.b10k.xz",
+              "../maf/chrY.maf.xz",
+              "../maf/chrY.maf.b1M.xz",
+              "thousand_blastx_nr.xml.xz",
+              "thousand_blastx_nr.xml.s1M.xz",
+              "thousand_blastx_nr.xml.b1M.xz"]:
+        if not os.path.isfile(f):
+            continue
+        print("="*78)
+        print(f)
+        try:
+            h = XzReader(f, max_block_size=1048576)
+        except ValueError as e:
+            print(e)
+            continue
+        assert 2000 == h.seek(2000)
+        if len(h._index) > 3:
+            print(h._index[0])
+            print(h._index[1])
+            print("...")
+            print(h._index[-1])
+        print(h.read(100))
+        print("Done")
+        h.close()
+        print("")
