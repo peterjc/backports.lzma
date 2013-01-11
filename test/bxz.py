@@ -667,7 +667,12 @@ class XzReader(object):
         return self._handle.fileno()
 
 if __name__ == "__main__":
-    for f in ["../maf/chr19_gl000208_random.maf.xz",
+    for f in ["Lorem_Ipsum.txt.xz",
+              "Lorem_Ipsum.txt.b1k.xz",
+              "Lorem_Ipsum.txt.b1k.check_none.xz"
+              "Lorem_Ipsum.txt.b1k.crc32.xz",
+              "Lorem_Ipsum.txt.b1k.sha256.xz",
+              "../maf/chr19_gl000208_random.maf.xz",
               "../maf/chr19_gl000208_random.maf.b1k.xz",
               "../maf/chr19_gl000209_random.maf.xz",
               "../maf/chr19_gl000209_random.maf.b10k.xz",
