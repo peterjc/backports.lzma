@@ -18,11 +18,17 @@ class TestBlocked(unittest.TestCase):
             print("missing %s" % filename)
             return
         h = open(filename, "rb")
-        blocks, stream_count, checksum, max_uncomp_block = _load_index(h)
+        blocks, stream_count, max_uncomp_block = _load_index(h)
         h.close()
         self.assertEqual(exp_streams, stream_count)
         self.assertEqual(exp_blocks, len(blocks) - 1)
-        self.assertEqual(exp_checksum, checksum)
+        checks = [row[3] for row in blocks[:-1]]
+        if isinstance(exp_checksum, list):
+            for exp, checksum in zip(exp_checksum, checks):
+                self.assertEqual(checksum, exp)
+        else:
+            for checksum in checks:
+                self.assertEqual(checksum, exp_checksum)
 
         try:
             h = XzReader(filename, max_block_size=1048576)
@@ -60,9 +66,8 @@ class TestBlocked(unittest.TestCase):
 
     def test_Lorem_Ipsum_mixed_checksums(self):
         filename = "Lorem_Ipsum.txt.mixed1k.xz"
-        with open(filename, "rb") as h:
-            self.assertRaises(ValueError, _load_index, h)
-        self.assertRaises(ValueError, XzReader, filename)
+        self.check(filename, 6, 6, [CHECK_CRC64, CHECK_CRC32, CHECK_SHA256,
+                                    CHECK_NONE, CHECK_CRC32, CHECK_CRC64])
 
     def test_maf_chr19(self):
         if not os.path.isdir("../maf"):

@@ -14,9 +14,8 @@ approach - this is a Python wrapper using the (backported) `lzma` module
 which calls the underlying library XZ (written in C).
 
 Note that for multi-stream XZ files, the different streams could be using
-different checksums (set in the stream header/footer). Thus we should check
-they are the same, or regard any differences between streams as an error
-(current approach), or simply ignore the checksum (in breach of the spec).
+different checksums (set in the stream header/footer). Therefore while the
+block index is constructed we also record the check sum used.
 
 Note that v1.0 of the command line XZ compression tool lacks an option to set
 the block size and defaults to creating a single stream with a string block
@@ -400,13 +399,13 @@ def _load_index(h, size=None):
 
      - start offset on disk of the compressed block
      - start offset of decompressed data in this block
+     - check-sum type for this block
 
     The dummy block is included so the compressed and uncompressed
     size of any block an be calculated.
 
     Additionally it returns the number of streams (integer, min 1),
-    checksum constant, and the size of the largest uncompressed block
-    (for convenience).
+    and the size of the largest uncompressed block (for convenience).
 
     To perform a random access seek to a given position in the
     decompressed data, use the second list to find which block
@@ -418,7 +417,6 @@ def _load_index(h, size=None):
     """
     h.seek(0)
     stream_flag = _load_stream_header(h)
-    checksum_function = _checksum_from_stream_flag(stream_flag)
 
     if size is None:
         size = os.fstat(h.fileno()).st_size
@@ -435,6 +433,7 @@ def _load_index(h, size=None):
         #print("Scanning stream ending at %i" % stream_end)
         h.seek(stream_end - 12)
         back_size, footer_stream_flag = _load_stream_footer(h)
+        checksum = _checksum_from_stream_flag(footer_stream_flag)
         h.seek(stream_end - 12 - back_size)
         block_sizes = list(_load_stream_index(h, back_size))
         #print("Stream ending at %i has %i blocks, ending at %i" % (stream_end, len(block_sizes), stream_end - 12 - back_size))
@@ -456,7 +455,7 @@ def _load_index(h, size=None):
             #          % (block_start, block_end, unpadded_size, padded_size, uncompressed_size))
             h.seek(block_start)
             _load_stream_block_header(h, unpadded_size, uncompressed_size)
-            block_starts_and_uncomp_sizes.append((block_start, unpadded_size, uncompressed_size))
+            block_starts_and_uncomp_sizes.append((block_start, unpadded_size, uncompressed_size, checksum))
         assert stream_comp_size % 4 == 0
         #print("Stream %i --> %i (%0.1f%%)" % (stream_uncomp_size, stream_comp_size, stream_comp_size*100.0/stream_uncomp_size))
         stream_start = stream_end - 12 - back_size - stream_comp_size - 12
@@ -465,9 +464,10 @@ def _load_index(h, size=None):
         h.seek(stream_start)
         header_stream_flag = _load_stream_header(h)
         assert header_stream_flag == footer_stream_flag
-        if stream_flag != header_stream_flag:
-            raise ValueError("Multiple streams with different flags found, %r vs %r" \
-                             % (stream_flag, header_stream_flag))
+        #Treat a change of checksum as a warning?
+        #if stream_flag != header_stream_flag:
+        #    raise ValueError("Multiple streams with different flags found, %r vs %r" \
+        #                     % (stream_flag, header_stream_flag))
         #print("Confirmed stream location is %i to %i, flag %r" % (stream_start, stream_end, header_stream_flag))
         #Check preceeding stream (if any)
         stream_end = stream_start
@@ -479,22 +479,22 @@ def _load_index(h, size=None):
     total_uncompressed = 0
     max_uncomp_block = 0
     blocks = []
-    for block_start, unpadded_size, uncompressed_size in block_starts_and_uncomp_sizes[::-1]:
+    for block_start, unpadded_size, uncompressed_size, checksum in block_starts_and_uncomp_sizes[::-1]:
         max_uncomp_block = max(max_uncomp_block, uncompressed_size)
-        blocks.append((block_start, total_uncompressed, unpadded_size))
+        blocks.append((block_start, total_uncompressed, unpadded_size, checksum))
         total_uncompressed += uncompressed_size
         #TODO - Rather than using a triple-tuple, can we ensure that the
         #jump in block_start gives the (padded) block size by including
         #dummy entries where we have a stream end/start?
-    blocks.append((size, total_uncompressed, 0))
+    blocks.append((size, total_uncompressed, 0, None))
     #print("End", size, total_uncompressed)
     assert total_uncompressed == total_uncomp_size
-    return blocks, stream_count, checksum_function, max_uncomp_block
+    return blocks, stream_count, max_uncomp_block
 
 #import lzma
 #_hello = lzma.compress(b"Hello")
 _hello = b'\xfd7zXZ\x00\x00\x04\xe6\xd6\xb4F\x02\x00!\x01\x16\x00\x00\x00t/\xe5\xa3\x01\x00\x04Hello\x00\x00\x00\x00\xc8\xac{\xc8;\\\xcfQ\x00\x01\x1d\x05\xb8-\x80\xaf\x1f\xb6\xf3}\x01\x00\x00\x00\x00\x04YZ'
-assert ([(12, 0, 29), (64, 5, 0)], 1, CHECK_CRC64, 5) \
+assert ([(12, 0, 29, CHECK_CRC64), (64, 5, 0, None)], 1, 5) \
     == _load_index(BytesIO(_hello), len(_hello)), _load_index(BytesIO(_hello), len(_hello))
 
 class XzReader(object):
@@ -531,7 +531,7 @@ class XzReader(object):
         self._magic = handle.read(12)
         self._magic_foot = _null*8 + self._magic[6:8] + b'YZ'
         handle.seek(0)
-        self._index, streams, self._checksum, max_block = _load_index(handle)
+        self._index, streams, max_block = _load_index(handle)
         if max_block > max_block_size:
             if not fileobj:
                 #We didn't open it, so we won't close it:
@@ -567,7 +567,7 @@ class XzReader(object):
                                  % (0, length))
         #Find which block this is in...
         #TODO - Replace this simple list with a faster lookup structure
-        for i, (comp_start, uncomp_start, unpadded_size) in enumerate(self._index):
+        for i, (comp_start, uncomp_start, unpadded_size, checksum) in enumerate(self._index):
             if offset < uncomp_start:
                 #Overshot!
                 i -= 1
@@ -594,6 +594,7 @@ class XzReader(object):
             self._buffers.popitem()
 
         block_start = self._index[block_number][0]
+        checksum = self._index[block_number][3]
         block_size = self._index[block_number+1][0] - block_start
         if block_size != self._index[block_number][2]:
             #print("Hmm. Block size %i, not %i" % (self._index[block_number][2], block_size))
@@ -611,7 +612,7 @@ class XzReader(object):
         else:
             pad = 0
         #Unpadded Size is the size of the Block Header, Compressed Data, and Check fields.
-        crc_width = _checksum__width(self._checksum)
+        crc_width = _checksum__width(checksum)
         data = self._handle.read(block_size - block_header_len - crc_width + pad)
         #print("Loading block %i, raw size on disk was %i (plus %i pad, less %i header)" \
         #      % (block_number, block_size, pad, block_header_len))
