@@ -2,20 +2,40 @@
 # All rights reserved.
 """Python module for random access to blocked XZ files (LMZA compression).
 
-Python 3.3 includes the moudle lmza which allows read and write access
-to XZ files, however random access is emulated and is slow (much like
-with Python's gzip module).
+Python 3.3 includes the module `lmza` which allows read and write access
+to XZ files, which has been backported for Python 2.6 onwards. However,
+random access is emulated and is slow (much like with Python's gzip module).
 
-Biopython's bgzf module supports efficient random access to BGZF files,
+Biopython's `bgzf` module supports efficient random access to BGZF files,
 Blocked GNU Zip Format, a variant of GZIP using blocks for random access.
 This was implemented as a Python module calling the library zlib (in C)
 for efficient compression and decompression. Here we take a similar
-approach.
+approach - this is a Python wrapper using the (backported) `lzma` module
+which calls the underlying library XZ (written in C).
 
 Note that for multi-stream XZ files, the different streams could be using
 different checksums (set in the stream header/footer). Thus we should check
 they are the same, or regard any differences between streams as an error
 (current approach), or simply ignore the checksum (in breach of the spec).
+
+Note that v1.0 of the command line XZ compression tool lacks an option to set
+the block size and defaults to creating a single stream with a string block
+containing all the data. In order to create block based XZ files, use at least
+v1.1 of the XZ compression tool which supports the --block-size argument (and
+the --block-list argument too).
+
+The random access to XZ files works by seeking to the relevant block, and
+decompressing that entire block. Several decompressed blocks are held in
+memory to improve performance when reading from several parts of the file.
+Using larger blocks gives better compression, but will slow down random
+access and require more memory.
+
+When opening an XZ file for random access, it will seek to the end of the
+final stream in order to load the stream's block index. It will then seek
+to the end of any preceeding stream in order to load its block index. Then
+combining all the block indexes, we can map from a seek posistion in the
+decompressed data to the relevant block and the offset within that block's
+decompressed data.
 
 This work is based heavily on reading the XZ file format specification,
 http://tukaani.org/xz/format.html
