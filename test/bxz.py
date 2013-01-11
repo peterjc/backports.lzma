@@ -236,7 +236,7 @@ def _checksum_from_stream_flag(buffer):
     elif check_sum == 0x04:
         return CHECK_CRC64
     elif check_sum == 0x0A:
-        return CHECK_SHA264
+        return CHECK_SHA256
     else:
         raise ValueError("Reserved check sum value in stream flag %r" % buffer)
 
