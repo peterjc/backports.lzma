@@ -22,7 +22,6 @@ http://tukaani.org/xz/format.html
 """
 
 import os
-#import lzma
 import struct
 try:
     #Python 2
