@@ -4,19 +4,25 @@
 import os
 import unittest
 
+try:
+    from backports.lzma import CHECK_NONE, CHECK_CRC32, CHECK_CRC64, CHECK_SHA256
+except ImportError:
+    from lzma import CHECK_NONE, CHECK_CRC32, CHECK_CRC64, CHECK_SHA256
+
 from bxz import XzReader, _load_index
 
 class TestBlocked(unittest.TestCase):
 
-    def check(self, filename, exp_streams, exp_blocks):
+    def check(self, filename, exp_streams, exp_blocks, exp_checksum=CHECK_CRC64):
         if not os.path.isfile(filename):
             print("missing %s" % filename)
             return
         h = open(filename, "rb")
-        blocks, stream_count, max_uncomp_block = _load_index(h)
+        blocks, stream_count, checksum, max_uncomp_block = _load_index(h)
         h.close()
         self.assertEqual(exp_streams, stream_count)
         self.assertEqual(exp_blocks, len(blocks) - 1)
+        self.assertEqual(exp_checksum, checksum)
 
         try:
             h = XzReader(filename, max_block_size=1048576)
@@ -34,23 +40,23 @@ class TestBlocked(unittest.TestCase):
     
     def test_Lorem_Ipsum_1s_1b(self):
         filename = "Lorem_Ipsum.txt.xz"
-        self.check(filename, 1, 1)
+        self.check(filename, 1, 1, CHECK_CRC64)
 
     def test_Lorem_Ipsum_6s_6b(self):
         filename = "Lorem_Ipsum.txt.s1k.xz"
-        self.check(filename, 6, 6)
+        self.check(filename, 6, 6, CHECK_CRC64)
 
     def test_Lorem_Ipsum_1s_6b_sha256(self):
         filename = "Lorem_Ipsum.txt.b1k.sha256.xz"
-        self.check(filename, 1, 6)
+        self.check(filename, 1, 6, CHECK_SHA256)
 
     def test_Lorem_Ipsum_1s_6b_crc32(self):
         filename = "Lorem_Ipsum.txt.b1k.crc32.xz"
-        self.check(filename, 1, 6)
+        self.check(filename, 1, 6, CHECK_CRC32)
 
     def test_Lorem_Ipsum_1s_6b_check_none(self):
         filename = "Lorem_Ipsum.txt.b1k.check_none.xz"
-        self.check(filename, 1, 6)
+        self.check(filename, 1, 6, CHECK_NONE)
 
     def test_Lorem_Ipsum_mixed_checksums(self):
         filename = "Lorem_Ipsum.txt.mixed1k.xz"

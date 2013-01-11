@@ -221,7 +221,19 @@ assert (1, 7) == _parse_variable_int(b'\x07')
 assert (3, 1024**2) == _parse_variable_int(b'\x80\x80@')
 assert _encode_variable_int(1024**2) == b"\x80\x80@"
 
-
+def _checksum__width(check_sum):
+    if check_sum == CHECK_NONE:
+        return 0
+    elif check_sum == CHECK_CRC32:
+        return 4
+    elif check_sum == CHECK_CRC64:
+        return 8
+    elif check_sum == CHECK_SHA256:
+        return 32
+    else:
+        # Note that for the other reserved values, the size is already
+        # defined in the specification, see 2.1.1.2. Stream Flags
+        raise ValueError("Invalid check-sum constant %r" % check_sum)
 
 def _checksum_from_stream_flag(buffer):
     assert len(buffer)==2
@@ -384,9 +396,8 @@ def _load_index(h, size=None):
     we can infer the compressed data position corresponding to
     each block of data.
 
-    The return value of this function is a first of all list of
-    tuples, one for each block, and a dummy block for the end of
-    the file:
+    The first return value of this function is a list of tuples,
+    one for each block, and a dummy block for the end of the file:
 
      - start offset on disk of the compressed block
      - start offset of decompressed data in this block
@@ -395,7 +406,8 @@ def _load_index(h, size=None):
     size of any block an be calculated.
 
     Additionally it returns the number of streams (integer, min 1),
-    and the size of the largest uncompressed block (for convience).
+    checksum constant, and the size of the largest uncompressed block
+    (for convenience).
 
     To perform a random access seek to a given position in the
     decompressed data, use the second list to find which block
@@ -478,12 +490,13 @@ def _load_index(h, size=None):
     blocks.append((size, total_uncompressed, 0))
     #print("End", size, total_uncompressed)
     assert total_uncompressed == total_uncomp_size
-    return blocks, stream_count, max_uncomp_block
+    return blocks, stream_count, checksum_function, max_uncomp_block
 
 #import lzma
 #_hello = lzma.compress(b"Hello")
 _hello = b'\xfd7zXZ\x00\x00\x04\xe6\xd6\xb4F\x02\x00!\x01\x16\x00\x00\x00t/\xe5\xa3\x01\x00\x04Hello\x00\x00\x00\x00\xc8\xac{\xc8;\\\xcfQ\x00\x01\x1d\x05\xb8-\x80\xaf\x1f\xb6\xf3}\x01\x00\x00\x00\x00\x04YZ'
-assert ([(12, 0, 29), (64, 5, 0)], 1, 5) == _load_index(BytesIO(_hello), len(_hello)), _load_index(BytesIO(_hello), len(_hello))
+assert ([(12, 0, 29), (64, 5, 0)], 1, CHECK_CRC64, 5) \
+    == _load_index(BytesIO(_hello), len(_hello)), _load_index(BytesIO(_hello), len(_hello))
 
 class XzReader(object):
     """XZ reader, acts like a read only handle but caches XZ blocks for random access.
@@ -519,7 +532,7 @@ class XzReader(object):
         self._magic = handle.read(12)
         self._magic_foot = _null*8 + self._magic[6:8] + b'YZ'
         handle.seek(0)
-        self._index, streams, max_block = _load_index(handle)
+        self._index, streams, self._checksum, max_block = _load_index(handle)
         if max_block > max_block_size:
             if not fileobj:
                 #We didn't open it, so we won't close it:
@@ -606,7 +619,6 @@ class XzReader(object):
         if pad:
             assert data[-pad:] == _null * pad, "Block ends %r but expected %i null padding" % (data[-pad:], pad)
         print("Decompressing block %i, using %i bytes, filters %r" % (block_number, len(data), filters))
-        print("%r" % data)
         data = _decompress(data, format=FORMAT_RAW, filters=filters)
         #data = _decompress(self._magic + data + self._magic_foot, format=FORMAT_XY)
         #data = _decompress(self._magic + data, format=FORMAT_XY)
