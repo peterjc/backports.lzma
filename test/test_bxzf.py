@@ -9,7 +9,7 @@ try:
 except ImportError:
     from lzma import CHECK_NONE, CHECK_CRC32, CHECK_CRC64, CHECK_SHA256
 
-from bxz import XzReader, _load_index
+from bxzf import XzReader, _load_index
 
 class TestBlocked(unittest.TestCase):
 

@@ -13,21 +13,17 @@ for efficient compression and decompression. Here we take a similar
 approach - this is a Python wrapper using the (backported) `lzma` module
 which calls the underlying library XZ (written in C).
 
-Note that for multi-stream XZ files, the different streams could be using
-different checksums (set in the stream header/footer). Therefore while the
-block index is constructed we also record the check sum used.
-
 Note that v1.0 of the command line XZ compression tool lacks an option to set
 the block size and defaults to creating a single stream with a string block
-containing all the data. In order to create block based XZ files, use at least
-v1.1 of the XZ compression tool which supports the --block-size argument (and
-the --block-list argument too).
+containing all the data. In order to create blocked XZ format files (BXZF),
+use at least v1.1 of the XZ compression tool which supports the --block-size
+argument (and the --block-list argument too).
 
-The random access to XZ files works by seeking to the relevant block, and
-decompressing that entire block. Several decompressed blocks are held in
-memory to improve performance when reading from several parts of the file.
-Using larger blocks gives better compression, but will slow down random
-access and require more memory.
+The random access to blocked XZ format (or BXZF for short) files works by
+seeking to the relevant block, and decompressing that entire block. Several
+decompressed blocks are held in memory to improve performance when reading
+from several parts of the file. Using larger blocks gives better compression,
+but will slow down random access and require more memory.
 
 When opening an XZ file for random access, it will seek to the end of the
 final stream in order to load the stream's block index. It will then seek
@@ -35,6 +31,10 @@ to the end of any preceeding stream in order to load its block index. Then
 combining all the block indexes, we can map from a seek posistion in the
 decompressed data to the relevant block and the offset within that block's
 decompressed data.
+
+Note that for multi-stream XZ files, the different streams could be using
+different checksums (set in the stream header/footer). Therefore while the
+block index is constructed we also record the check sum used.
 
 This work is based heavily on reading the XZ file format specification,
 http://tukaani.org/xz/format.html
