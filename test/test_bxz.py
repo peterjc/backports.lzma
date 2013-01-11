@@ -50,6 +50,12 @@ class TestBlocked(unittest.TestCase):
         filename = "Lorem_Ipsum.txt.b1k.check_none.xz"
         self.check(filename, 1, 6)
 
+    def test_Lorem_Ipsum_mixed_checksums(self):
+        filename = "Lorem_Ipsum.txt.mixed1k.xz"
+        with open(filename, "rb") as h:
+            self.assertRaises(ValueError, _load_index, h)
+        self.assertRaises(ValueError, XzReader, filename)
+
     def test_maf_chr19(self):
         if not os.path.isdir("../maf"):
             print("missing MAF examples")
