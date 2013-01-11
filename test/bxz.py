@@ -605,18 +605,15 @@ class XzReader(object):
         #print("Loading block %i, raw is %r" % (block_number, data))
         if pad:
             assert data[-pad:] == _null * pad, "Block ends %r but expected %i null padding" % (data[-pad:], pad)
-        if _decompress:
-            print("Decompressing block %i, using %i bytes, filters %r" % (block_number, len(data), filters))
-            print("%r" % data)
-            data = _decompress(data, format=FORMAT_RAW, filters=filters)
-            #data = _decompress(self._magic + data + self._magic_foot, format=FORMAT_XY)
-            #data = _decompress(self._magic + data, format=FORMAT_XY)
-            #data = _decompress(data, format=FORMAT_RAW, filters=None)
-            #data = _decompress_block(data, uncomp_size)
-            print("Block starts: %r" % data[:100])
-            assert len(data) == self._index[block_number+1][1] - self._index[block_number][1]
-        else:
-            print("Can't decompress with %r" % _decompress)
+        print("Decompressing block %i, using %i bytes, filters %r" % (block_number, len(data), filters))
+        print("%r" % data)
+        data = _decompress(data, format=FORMAT_RAW, filters=filters)
+        #data = _decompress(self._magic + data + self._magic_foot, format=FORMAT_XY)
+        #data = _decompress(self._magic + data, format=FORMAT_XY)
+        #data = _decompress(data, format=FORMAT_RAW, filters=None)
+        #data = _decompress_block(data, uncomp_size)
+        #print("Block starts: %r" % data[:100])
+        assert len(data) == self._index[block_number+1][1] - self._index[block_number][1]
         self._block = block_number
         self._buffer = data
         self._buffers[block_number] = data
