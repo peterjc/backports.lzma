@@ -1,4 +1,4 @@
-# Copyright 2012 by Peter Cock.
+# Copyright 2012-13 by Peter Cock.
 # All rights reserved.
 """Python module for random access to blocked XZ files (LMZA compression).
 
@@ -32,34 +32,21 @@ except:
     import builtins as __builtin__
 
 try:
+    from backports.lzma import CHECK_NONE, CHECK_CRC32, CHECK_CRC64, CHECK_SHA256
+    from backports.lzma import FORMAT_RAW, FORMAT_XZ, FILTER_LZMA1, FILTER_LZMA2
+    from backports.lzma import FILTER_DELTA, FILTER_X86, FILTER_POWERPC, FILTER_IA64
+    from backports.lzma import FILTER_ARM, FILTER_ARMTHUMB, FILTER_SPARC
+    from backports.lzma import decompress as _decompress
+except ImportError:
     from lzma import CHECK_NONE, CHECK_CRC32, CHECK_CRC64, CHECK_SHA256
     from lzma import FORMAT_RAW, FORMAT_XZ, FILTER_LZMA1, FILTER_LZMA2
     from lzma import FILTER_DELTA, FILTER_X86, FILTER_POWERPC, FILTER_IA64
     from lzma import FILTER_ARM, FILTER_ARMTHUMB, FILTER_SPARC
-except ImportError:
-    CHECK_NONE = 0
-    CHECK_CRC32 = 1
-    CHECK_CRC64 = 4
-    CHECK_SHA256 = 10
-    FORMAT_XZ = 1
-    FORMAT_RAW = 3
-    FILTER_LZMA1 = 4611686018427387905
-    FILTER_LZMA2 = 0x21 #33
-    FILTER_DELTA = 3
-    FILTER_X86 = 4
-    FILTER_POWERPC = 5
-    FILTER_IA64 = 6
-    FILTER_ARM = 7
-    FILTER_ARMTHUMB = 8
-    FILTER_SPARC = 9
+    from lzma import decompress as _decompress
+
 _filters = [FILTER_LZMA1, FILTER_LZMA2, FILTER_DELTA, FILTER_X86,
             FILTER_POWERPC, FILTER_IA64, FILTER_ARM, FILTER_ARMTHUMB,
             FILTER_SPARC]
-
-try:
-    from lzma import decompress as _decompress
-except ImportError:
-    _decompress = None
 
 import zlib #for crc32, see below
 #Same sign problem with: from binascii import crc32
