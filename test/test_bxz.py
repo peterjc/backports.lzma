@@ -18,16 +18,18 @@ class TestBlocked(unittest.TestCase):
         self.assertEqual(exp_streams, stream_count)
         self.assertEqual(exp_blocks, len(blocks) - 1)
 
-        return
-        #TODO - Finish CRC handling...
-        h = XzReader(filename, max_block_size=1048576)
-        assert 2000 == h.seek(2000)
+        try:
+            h = XzReader(filename, max_block_size=1048576)
+        except ValueError, e:
+            if "(over the limit specified of 1048576)" in str(e):
+                return
+            raise
+        self.assertEqual(2000, h.seek(2000))
         if len(h._index) > 3:
-            print(h._index[0])
-            print(h._index[1])
-            print("...")
-            print(h._index[-1])
-        print(h.read(100))
+            block = h._index[0]
+            block = h._index[1]
+            block = h._index[-1]
+        data = h.read(100)
         h.close()
     
     def test_Lorem_Ipsum_1s_1b(self):
