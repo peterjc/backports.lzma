@@ -351,8 +351,7 @@ def _load_stream_block_header(handle, expected_comp_size, expected_uncomp_size):
     return real_header_size, filters
 _hello = b'\x02\x00!\x01\x16\x00\x00\x00t/\xe5\xa3\x01\x00\x04Hello\x00\\x00\x00\x00\xc8\xac{\xc8;\\\xcfQ'
 assert (12, [{'dict_size': 8388608, 'id': 33}]) == _load_stream_block_header(BytesIO(_hello), None, None)
-if _decompress:
-    assert b'Hello' == _decompress(_hello[12:21], format=FORMAT_RAW, filters=[{'dict_size': 8388608, 'id': 33}])
+assert b'Hello' == _decompress(_hello[12:21], format=FORMAT_RAW, filters=[{'dict_size': 8388608, 'id': 33}])
 
 def _load_stream_index(handle, expected_size):
     assert expected_size % 4 == 0, expected_size
