@@ -57,11 +57,7 @@ def crc32(bytes):
         return 4294967296 + value
     return value
 
-try:
-    from io import BytesIO
-except ImportError:
-    #Fallback for Python 2.5 era
-    from StringIO import StringIO as BytesIO
+from io import BytesIO
 
 from Bio._py3k import _as_bytes, _as_string
 
