@@ -667,7 +667,11 @@ class XzReader(object):
         return self._handle.fileno()
 
 if __name__ == "__main__":
-    for f in ["Lorem_Ipsum.txt.xz",
+    for f in [# Default behaviour, one stream and one block:
+              "Lorem_Ipsum.txt.xz",
+              # Six streams each with one block of 1000 bytes:
+              "Lorem_Ipsum.txt.s1k.xz",
+              # One stream with six blocks of 1000 bytes:
               "Lorem_Ipsum.txt.b1k.xz",
               "Lorem_Ipsum.txt.b1k.check_none.xz"
               "Lorem_Ipsum.txt.b1k.crc32.xz",
