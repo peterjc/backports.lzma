@@ -59,8 +59,7 @@ setup(
     keywords = "xy lzma compression decompression",
     long_description = long_descr,
     classifiers = [
-        #'Development Status :: 5 - Production/Stable',
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
