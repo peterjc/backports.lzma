@@ -21,12 +21,6 @@ __all__ = [
     "open", "compress", "decompress", "is_check_supported",
 ]
 
-try:
-    #Python 3
-    import builtins
-except ImportError:
-    #Python 2
-    import __builtin__ as builtins
 import io
 from ._lzma import *
 from ._lzma import _encode_filter_properties, _decode_filter_properties
@@ -130,7 +124,7 @@ class LZMAFile(io.BufferedIOBase):
         if isinstance(filename, (str, bytes)):
             if "b" not in mode:
                 mode += "b"
-            self._fp = builtins.open(filename, mode)
+            self._fp = io.open(filename, mode)
             self._closefp = True
             self._mode = mode_code
         elif hasattr(filename, "read") or hasattr(filename, "write"):
