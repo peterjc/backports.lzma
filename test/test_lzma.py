@@ -560,6 +560,16 @@ class FileTestCase(unittest.TestCase):
             f.close()
         self.assertRaises(ValueError, f.seekable)
 
+        with TempFile(TESTFN, COMPRESSED_XZ):
+            f = LZMAFile(TESTFN)
+            try:
+                self.assertTrue(f.seekable())
+                f.read()
+                self.assertTrue(f.seekable())
+            finally:
+                f.close()
+            self.assertRaises(ValueError, f.seekable)
+
         f = LZMAFile(BytesIO(), "w")
         try:
             self.assertFalse(f.seekable())
