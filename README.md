@@ -109,6 +109,13 @@ Rhodes as documented here: http://pypi.python.org/pypi/backports/
 and http://bitbucket.org/brandon/backports
 
 
+Revisions
+=========
+
+v0.0.1 - First public release
+v0.0.2 - Fix the seekable attribute on Python 2 (Tomer Chachamu)
+
+
 Contributors
 ============
 
@@ -116,6 +123,8 @@ The initial Python lzma module implementation was by Per Øyvind Karlsen,
 which was then rewritten by Nadeem Vawda and included with Python 3.3.
 Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
+
+Later contributors include: Tomer Chachamu
 
 
 Bug Reports
