@@ -112,9 +112,11 @@ and http://bitbucket.org/brandon/backports
 Revisions
 =========
 
-v0.0.1 - First public release
-v0.0.2 - Fix the seekable attribute on Python 2 (Tomer Chachamu)
-       - More search paths for lib/include headers (Wynn Wilkes)
+ * v0.0.1 - January 2013
+    * First public release
+ * v0.0.2 - Pending
+    * Fix the seekable attribute on Python 2 (Tomer Chachamu)
+    * More search paths for lib/include headers (Wynn Wilkes)
 
 
 Contributors
