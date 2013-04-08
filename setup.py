@@ -56,7 +56,7 @@ setup(
     author_email = "p.j.a.cock@googlemail.com",
     url = "https://github.com/peterjc/backports.lzma",
     license='3-clause BSD License',
-    keywords = "xy lzma compression decompression",
+    keywords = "xz lzma compression decompression",
     long_description = long_descr,
     classifiers = [
         'Development Status :: 5 - Production/Stable',
