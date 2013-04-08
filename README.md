@@ -114,6 +114,7 @@ Revisions
 
 v0.0.1 - First public release
 v0.0.2 - Fix the seekable attribute on Python 2 (Tomer Chachamu)
+       - More search paths for lib/include headers (Wynn Wilkes)
 
 
 Contributors
@@ -124,7 +125,7 @@ which was then rewritten by Nadeem Vawda and included with Python 3.3.
 Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
 
-Later contributors include: Tomer Chachamu
+Later contributors include: Tomer Chachamu, Wynn Wilkes
 
 
 Bug Reports
