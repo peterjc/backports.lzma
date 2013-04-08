@@ -34,7 +34,7 @@ _MODE_WRITE    = 3
 _BUFFER_SIZE = 8192
 
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 class LZMAFile(io.BufferedIOBase):
 

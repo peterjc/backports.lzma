@@ -114,7 +114,7 @@ Revisions
 
  * v0.0.1 - January 2013
     * First public release
- * v0.0.2 - Pending
+ * v0.0.2 - April 2013
     * Fix the seekable attribute on Python 2 (Tomer Chachamu)
     * More search paths for lib/include headers (Wynn Wilkes)
 
