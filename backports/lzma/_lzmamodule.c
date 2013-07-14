@@ -17,8 +17,8 @@
 
 #include "pyerrors.h"
 #ifndef PyErr_NewExceptionWithDoc
-/* Python 2.7 and 3.2 added this. */
-#if PY_MAJOR_VERSION >= 3
+/* Python 2.7 and 3.2 added this. PyPy also uses const version of function. */
+#if (PY_MAJOR_VERSION >= 3 || (defined PYPY_VERSION && PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION >= 7 && PY_MICRO_VERSION >= 1))
 /* Copied from Python-3.2.3/Python/errors.c */
 PyObject *
 PyErr_NewExceptionWithDoc(const char *name, const char *doc,
