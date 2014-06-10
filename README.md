@@ -117,6 +117,8 @@ Revisions
  * v0.0.2 - April 2013
     * Fix the seekable attribute on Python 2 (Tomer Chachamu)
     * More search paths for lib/include headers (Wynn Wilkes)
+ * v0.0.3 - Pending
+    * Supports unicode filenames on Python 2 (Irving Reid)
 
 
 Contributors
@@ -127,7 +129,7 @@ which was then rewritten by Nadeem Vawda and included with Python 3.3.
 Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
 
-Later contributors include: Tomer Chachamu, Wynn Wilkes
+Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
 
 
 Bug Reports
