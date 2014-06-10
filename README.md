@@ -12,8 +12,8 @@ This code is a backport of the Python 3.3 standard library module 'lzma'
 for use on older versions of Python where it was not included. It is
 available from PyPI (released downloads only) and GitHub (repository):
 
- * PyPI - http://pypi.python.org/pypi/backports.lzma/
- * GitHub - https://github.com/peterjc/backports.lzma
+* PyPI - http://pypi.python.org/pypi/backports.lzma/
+* GitHub - https://github.com/peterjc/backports.lzma
 
 There are some older Python libraries like PylibLZMA and PyLZMA
 but these are both using LZMA Utils (not XZ Utils, so they have
@@ -117,7 +117,7 @@ Revisions
  * v0.0.2 - April 2013
     * Fix the seekable attribute on Python 2 (Tomer Chachamu)
     * More search paths for lib/include headers (Wynn Wilkes)
- * v0.0.3 - Pending
+ * v0.0.3 - June 2014
     * Supports unicode filenames on Python 2 (Irving Reid)
 
 
