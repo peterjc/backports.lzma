@@ -1048,6 +1048,16 @@ class OpenTestCase(unittest.TestCase):
             with lzma.open(TESTFN, "rb") as f:
                 self.assertEqual(f.read(), INPUT * 2)
 
+    def test_unicode_filename(self):
+        if sys.version_info >= (3,):
+            return
+        ufile = unicode(TESTFN)
+        with TempFile(ufile):
+            with lzma.open(ufile, "wb") as f:
+                f.write(INPUT)
+            with lzma.open(ufile, "rb") as f:
+                self.assertEqual(f.read(), INPUT)
+
     def test_bad_params(self):
         # Test invalid parameter combinations.
         self.assertRaises(ValueError, lzma.open,
