@@ -51,8 +51,8 @@ class LZMAFile(io.BufferedIOBase):
                  format=None, check=-1, preset=None, filters=None):
         """Open an LZMA-compressed file in binary mode.
 
-        filename can be either an actual file name (given as a str or
-        bytes object), in which case the named file is opened, or it can
+        filename can be either an actual file name (given as a str, unicode
+        or bytes object), in which case the named file is opened, or it can
         be an existing file object to read from or write to.
 
         mode can be "r" for reading (default), "w" for (over)writing, or
@@ -121,7 +121,7 @@ class LZMAFile(io.BufferedIOBase):
         else:
             raise ValueError("Invalid mode: {!r}".format(mode))
 
-        if isinstance(filename, (str, bytes)):
+        if isinstance(filename, (str, bytes, unicode)):
             if "b" not in mode:
                 mode += "b"
             self._fp = io.open(filename, mode)
@@ -131,7 +131,7 @@ class LZMAFile(io.BufferedIOBase):
             self._fp = filename
             self._mode = mode_code
         else:
-            raise TypeError("filename must be a str or bytes object, or a file")
+            raise TypeError("filename must be a str, unicode or bytes object, or a file")
 
     def close(self):
         """Flush and close the file.
