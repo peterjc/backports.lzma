@@ -1,0 +1,7 @@
+# MANIFEST.in
+#
+# This tells distutils what files to distribute.
+
+include README.md
+recursive-include backports *.py
+recursive-include test *.py
