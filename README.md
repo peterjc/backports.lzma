@@ -119,6 +119,8 @@ Revisions
     * More search paths for lib/include headers (Wynn Wilkes)
  * v0.0.3 - June 2014
     * Supports unicode filenames on Python 2 (Irving Reid)
+ * v0.0.4 - September 2014
+    * Declare namespace package to avoid warnings (Ralph Bean)
 
 
 Contributors
@@ -130,6 +132,7 @@ Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
+Ralph Bean
 
 
 Bug Reports
