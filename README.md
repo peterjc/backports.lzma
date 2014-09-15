@@ -150,6 +150,22 @@ bundled with Python 3.3 or later should be reported to the Python
 project at http://bugs.python.org instead.
 
 
+Release Process
+===============
+
+After testing locally and with TravisCI (see below), new releases
+are tagged in git as follows:
+
+    $ git tag backports.lzma.vX.X.X
+
+I then use the following to upload a new release to the Python
+Packaging Index (PyPI):
+
+    $ python setup.py register sdist upload
+
+The update then appears on http://pypi.python.org/pypi/backports.lzma/
+
+
 Automated Testing
 =================
 
