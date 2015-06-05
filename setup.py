@@ -7,6 +7,7 @@
 
 import sys, os
 from warnings import warn
+import subprocess
 
 from distutils import log
 from distutils.command.build_ext import build_ext
@@ -27,13 +28,41 @@ if __version__ is None:
     sys.exit(1)
 print("This is backports.lzma version %s" % __version__)
 
+
+def pkg_config(*args):
+    """Call pkg-config and return stdout data on success."""
+    popen = subprocess.Popen(["pkg-config"]  + list(args), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = popen.communicate()
+    if popen.wait():
+        if stderr:
+            print("Running pkg-config %s failed:\n%s" % (" ".join(args), stderr))
+        else:
+            # Most likely pkg-config is not installed (Windows?)
+            pass
+    else:
+        return stdout.strip()
+
+
+def get_include_dirs():
+    """Return list of include dirs to use for building."""
+    pc_dir = pkg_config("--variable=includedir", "liblzma")
+    dirs = [os.path.join(home, 'include'), '/opt/local/include', '/usr/local/include', pc_dir]
+    return filter(None, dirs)
+
+def get_library_dirs():
+    """Return list of library dirs to use for building."""
+    pc_dir = pkg_config("--variable=libdir", "liblzma")
+    dirs = [os.path.join(home, 'lib'), '/opt/local/lib', '/usr/local/lib', pc_dir]
+    return filter(None, dirs)
+
+
 packages = ["backports", "backports.lzma"]
 home = os.path.expanduser("~")
 extens = [Extension('backports/lzma/_lzma',
                     ['backports/lzma/_lzmamodule.c'],
                     libraries = ['lzma'],
-                    include_dirs = [os.path.join(home, 'include'), '/opt/local/include', '/usr/local/include'],
-                    library_dirs = [os.path.join(home, 'lib'), '/opt/local/lib', '/usr/local/lib']
+                    include_dirs = get_include_dirs(),
+                    library_dirs = get_library_dirs(),
                     )]
 
 descr = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files."
