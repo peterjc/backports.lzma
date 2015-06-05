@@ -31,7 +31,9 @@ print("This is backports.lzma version %s" % __version__)
 
 def pkg_config(*args):
     """Call pkg-config and return stdout data on success."""
-    popen = subprocess.Popen(["pkg-config"]  + list(args), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    popen = subprocess.Popen(["pkg-config"]  + list(args),
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            universal_newlines=True)
     stdout, stderr = popen.communicate()
     if popen.wait():
         if stderr:
@@ -47,13 +49,13 @@ def get_include_dirs():
     """Return list of include dirs to use for building."""
     pc_dir = pkg_config("--variable=includedir", "liblzma")
     dirs = [os.path.join(home, 'include'), '/opt/local/include', '/usr/local/include', pc_dir]
-    return filter(None, dirs)
+    return [d for d in dirs if d]
 
 def get_library_dirs():
     """Return list of library dirs to use for building."""
     pc_dir = pkg_config("--variable=libdir", "liblzma")
     dirs = [os.path.join(home, 'lib'), '/opt/local/lib', '/usr/local/lib', pc_dir]
-    return filter(None, dirs)
+    return [d for d in dirs if d]
 
 
 packages = ["backports", "backports.lzma"]
