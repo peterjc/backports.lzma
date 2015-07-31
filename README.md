@@ -121,6 +121,8 @@ Revisions
     * Supports unicode filenames on Python 2 (Irving Reid)
  * v0.0.4 - September 2014
     * Declare namespace package to avoid warnings (Ralph Bean)
+      (Later retracted from PyPI due to installation problems with
+      ``setuptools`` versus ``distutils``, see GitHub issue #8 and #9).
 
 
 Contributors
