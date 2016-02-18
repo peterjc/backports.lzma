@@ -532,7 +532,7 @@ class XzReader(object):
         self._magic_foot = _null*8 + self._magic[6:8] + b'YZ'
         handle.seek(0)
         self._index, streams, max_block = _load_index(handle)
-        if max_block > max_block_size:
+        if max_block_size and max_block > max_block_size:
             if not fileobj:
                 #We didn't open it, so we won't close it:
                 handle.close()
@@ -650,6 +650,7 @@ class XzReader(object):
             data = self._buffer[self._within_block_offset:]
             size -= len(data)
             self._load_block() #will reset offsets
+            self._within_block_offset = 0
             #TODO - Test with corner case of an empty block followed by
             #a non-empty block
             if not self._buffer:
