@@ -455,11 +455,18 @@ def decompress(data, format=FORMAT_AUTO, memlimit=None, filters=None):
     results = []
     while True:
         decomp = LZMADecompressor(format, memlimit, filters)
-        results.append(decomp.decompress(data))
+        try:
+            res = decomp.decompress(data)
+        except LZMAError:
+            if results:
+                break  # Leftover data is not a valid LZMA/XZ stream; ignore it.
+            else:
+                raise  # Error on the first iteration; bail out.
+        results.append(res)
         if not decomp.eof:
             raise LZMAError("Compressed data ended before the "
                             "end-of-stream marker was reached")
-        if not decomp.unused_data:
-            return b"".join(results)
-        # There is unused data left over. Proceed to next stream.
         data = decomp.unused_data
+        if not data:
+            break
+    return b"".join(results)
