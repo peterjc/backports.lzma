@@ -3,8 +3,11 @@
 # laid down here: http://pypi.python.org/pypi/backports/1.0
 # Backports homepage: http://bitbucket.org/brandon/backports
 
-# A Python "namespace package" http://www.python.org/dev/peps/pep-0382/
-# This always goes inside of a namespace package's __init__.py
-
-from pkgutil import extend_path
-__path__ = extend_path(__path__, __name__)
+try:
+    # This is a workaround for setuptools that we'll use *if* it is present
+    __import__('pkg_resources').declare_namespace(__name__)
+except ImportError:
+    # Otherwise, use the stdlib way defined in this rejected pep
+    # http://www.python.org/dev/peps/pep-0382/
+    from pkgutil import extend_path
+    __path__ = extend_path(__path__, __name__)
