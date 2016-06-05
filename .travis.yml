@@ -7,8 +7,11 @@ python:
   - "3.4"
   - "3.5"
   - "nightly"
-before_install:
-  - sudo apt-get install liblzma-dev
+sudo: false
+addons:
+  apt:
+    packages:
+    - liblzma-dev
 install:
   - "python setup.py install"
 before_script:
