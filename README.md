@@ -31,7 +31,7 @@ The 'lmza' module provided with Python 3.3 should work on all the
 main operating systems, so in theory so too should this backport:
 
 * Mac OS X: Tested under Python 2.6, 2.7, 3.0 to 3.4 inclusive
-* Linux: Tested under Python 2.6, 2.7, 3.0 to 3.4 inclusive
+* Linux: Tested under Python 2.6, 2.7, 3.0 to 3.5 inclusive
 * Windows: Untested (so far)
 
 Other than some minor changes in the exceptions for some errors,
@@ -123,6 +123,10 @@ Revisions
     * Declare namespace package to avoid warnings (Ralph Bean)
       (Later retracted from PyPI due to installation problems with
       ``setuptools`` versus ``distutils``, see GitHub issue #8 and #9).
+ * v0.0.5 - June 2016
+    * Backported fix for Python Issue 19839 to ignore non-LZMA
+      trailing data (original Python 3.5.1 patch by Nadeem Vawda,
+      backported by deroko, see GitHub pull request #5).
 
 
 Contributors
@@ -134,7 +138,7 @@ Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
-Ralph Bean
+Ralph Bean, Deroko
 
 
 Bug Reports
