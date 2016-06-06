@@ -78,6 +78,10 @@ This should find the XZ Util header file and library automatically
 You should now be able to import the backport from Python 3
 as shown below.
 
+If you are trying to install this under	the system Python, you
+will need admin rights and replace `python setup.py install` with
+`sudo python setup.py install` instead.
+
 
 Usage
 =====
