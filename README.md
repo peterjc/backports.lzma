@@ -127,6 +127,10 @@ Revisions
     * Backported fix for Python Issue 19839 to ignore non-LZMA
       trailing data (original Python 3.5.1 patch by Nadeem Vawda,
       backported by deroko, see GitHub pull request #5).
+ * v0.0.6 - June 2016
+   * Updated namespace packaging declaration now required by
+     more recent versions of setuptools which prevented simple
+     installation of v0.0.4 and v0.0.5 from PyPI.
 
 
 Contributors
