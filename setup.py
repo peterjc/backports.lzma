@@ -34,14 +34,14 @@ extens = [Extension('backports/lzma/_lzma',
                     ['backports/lzma/_lzmamodule.c'],
                     libraries = ['lzma'],
                     include_dirs = [
-                        os.path.join(home, 'include'),
                         os.path.join(prefix, 'include'),
+                        os.path.join(home, 'include'),
                         '/opt/local/include',
                         '/usr/local/include'
                     ],
                     library_dirs = [
-                        os.path.join(home, 'lib'),
                         os.path.join(prefix, 'lib'),
+                        os.path.join(home, 'lib'),
                         '/opt/local/lib',
                         '/usr/local/lib'
                     ]
