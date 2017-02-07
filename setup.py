@@ -28,12 +28,23 @@ if __version__ is None:
 print("This is backports.lzma version %s" % __version__)
 
 packages = ["backports", "backports.lzma"]
+prefix = sys.prefix
 home = os.path.expanduser("~")
 extens = [Extension('backports/lzma/_lzma',
                     ['backports/lzma/_lzmamodule.c'],
                     libraries = ['lzma'],
-                    include_dirs = [os.path.join(home, 'include'), '/opt/local/include', '/usr/local/include'],
-                    library_dirs = [os.path.join(home, 'lib'), '/opt/local/lib', '/usr/local/lib']
+                    include_dirs = [
+                        os.path.join(home, 'include'),
+                        os.path.join(prefix, 'include'),
+                        '/opt/local/include',
+                        '/usr/local/include'
+                    ],
+                    library_dirs = [
+                        os.path.join(home, 'lib'),
+                        os.path.join(prefix, 'lib'),
+                        '/opt/local/lib',
+                        '/usr/local/lib'
+                    ]
                     )]
 
 descr = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files."
