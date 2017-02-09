@@ -30,7 +30,7 @@ The 'lmza' module provided with Python 3.3 should work on all the main
 operating systems, so in theory so too should this backport:
 
 * Mac OS X: Tested under Python 2.6, 2.7, 3.0 to 3.4 inclusive
-* Linux: Tested under Python 2.6, 2.7, 3.0 to 3.5 inclusive
+* Linux: Tested under Python 2.6, 2.7, 3.0 to 3.6 inclusive
 * Windows: Untested (so far)
 
 Other than some minor changes in the exceptions for some errors, based on the
