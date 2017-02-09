@@ -130,11 +130,14 @@ Revisions
  * v0.0.5 - June 2016
     * Backported fix for Python Issue 19839 to ignore non-LZMA
       trailing data (original Python 3.5.1 patch by Nadeem Vawda,
-      backported by deroko, see GitHub pull request #5).
+      backported by Deroko, see GitHub pull request #5).
  * v0.0.6 - June 2016
    * Updated namespace packaging declaration now required by
      more recent versions of setuptools which prevented simple
      installation of v0.0.4 and v0.0.5 from PyPI.
+ * v0.0.7 - February 2017
+   * Check and prefer the `sys.prefix` at installation time to find
+     the lib/include headers (John Kirkham).
 
 
 Contributors
@@ -146,7 +149,7 @@ Based on this work, it was backported to also run on Python 2.6, 2.7 and
 3.0, 3.1 and 3.2 by Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
-Ralph Bean, Deroko
+Ralph Bean, Deroko, John Kirkham.
 
 
 Bug Reports
@@ -166,6 +169,9 @@ project at http://bugs.python.org instead.
 
 Release Process
 ===============
+
+The version is incremented in file `backports/lzma/__init__.py`
+(from where ``setup.py`` will extract it at runtime).
 
 After testing locally and with TravisCI (see below), new releases
 are tagged in git as follows:
