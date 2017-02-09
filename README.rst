@@ -46,11 +46,11 @@ Installation
 ============
 
 First you must install the XZ Utils C library, which on a Debian
-based Linux distribution can be done in one line:
+based Linux distribution can be done in one line::
 
     $ sudo apt-get install liblzma-dev
 
-Otherwise do this from source, this is what I do on Mac OS X:
+Otherwise do this from source, this is what I do on Mac OS X::
 
     $ curl -O http://tukaani.org/xz/xz-5.0.4.tar.gz
     $ tar -zxvf xz-5.0.4.tar.gz
@@ -61,7 +61,7 @@ Otherwise do this from source, this is what I do on Mac OS X:
     $ make install
 
 Now you can install this 'lzma' backport. First download and
-decompress the source code, or clone the github repository:
+decompress the source code, or clone the github repository::
 
     $ git clone git://github.com/peterjc/backports.lzma.git
     $ cd backports.lzma
@@ -69,9 +69,9 @@ decompress the source code, or clone the github repository:
     $ cd test
     $ python test_lzma.py
 
-To install for a specific version of Python, replace `python` (which
+To install for a specific version of Python, replace ``python`` (which
 will use the system's default Python) in the above with a specific
-version like `python2`, `python2.6` or `python3`, `python3.2`, etc.
+version like ``python2``, ``python2.6`` or ``python3``, ``python3.2``, etc.
 
 This should find the XZ Util header file and library automatically
 (and will check for a local install under your home directory).
@@ -79,15 +79,15 @@ You should now be able to import the backport from Python 3
 as shown below.
 
 If you are trying to install this under the system Python, you
-will need admin rights and replace `python setup.py install` with
-`sudo python setup.py install` instead.
+will need admin rights and replace ``python setup.py install`` with
+``sudo python setup.py install`` instead.
 
 
 Usage
 =====
 
 The expected usage is as follows if you want to prioritise the
-standard library provided lzma if present:
+standard library provided lzma if present::
 
     try:
         import lzma
@@ -132,12 +132,12 @@ Revisions
       trailing data (original Python 3.5.1 patch by Nadeem Vawda,
       backported by Deroko, see GitHub pull request #5).
  * v0.0.6 - June 2016
-   * Updated namespace packaging declaration now required by
-     more recent versions of setuptools which prevented simple
-     installation of v0.0.4 and v0.0.5 from PyPI.
+    * Updated namespace packaging declaration now required by
+      more recent versions of setuptools which prevented simple
+      installation of v0.0.4 and v0.0.5 from PyPI.
  * v0.0.7 - February 2017
-   * Check and prefer the `sys.prefix` at installation time to find
-     the lib/include headers (John Kirkham).
+    * Check and prefer the ``sys.prefix`` at installation time to
+      find the lib/include headers (John Kirkham).
 
 
 Contributors
@@ -170,20 +170,20 @@ project at http://bugs.python.org instead.
 Release Process
 ===============
 
-The version is incremented in file `backports/lzma/__init__.py`
+The version is incremented in file ``backports/lzma/__init__.py``
 (from where ``setup.py`` will extract it at runtime).
 
 After testing locally and with TravisCI (see below), new releases
-are tagged in git as follows:
+are tagged in git as follows::
 
     $ git tag backports.lzma.vX.X.X
 
-Tags must explicitly be pushed to GitHub:
+Tags must explicitly be pushed to GitHub::
 
     $ git push origin master --tags
 
 I then use the following to upload a new release to the Python
-Packaging Index (PyPI):
+Packaging Index (PyPI)::
 
     $ python setup.py register sdist upload
 
@@ -196,4 +196,6 @@ Automated Testing
 TravisCI is being used for continuous integration testing under Linux,
 see https://travis-ci.org/peterjc/backports.lzma
 
-[![Build Status](https://secure.travis-ci.org/peterjc/backports.lzma.png?branch=master)](https://travis-ci.org/peterjc/backports.lzma)
+.. image:: https://secure.travis-ci.org/peterjc/backports.lzma.png?branch=master
+    :target: https://travis-ci.org/peterjc/backports.lzma/builds
+
