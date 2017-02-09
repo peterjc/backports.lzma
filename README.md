@@ -178,6 +178,10 @@ are tagged in git as follows:
 
     $ git tag backports.lzma.vX.X.X
 
+Tags must explicitly be pushed to GitHub:
+
+    $ git push origin master --tags
+
 I then use the following to upload a new release to the Python
 Packaging Index (PyPI):
 
