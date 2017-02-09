@@ -2,7 +2,7 @@
 #
 # This tells distutils what files to distribute.
 
-include README.md
+include README.rst
 include LICENSE
 recursive-include backports *.py
 recursive-include test *.py
