@@ -65,7 +65,7 @@ decompress the source code, or clone the github repository:
 
     $ git clone git://github.com/peterjc/backports.lzma.git
     $ cd backports.lzma
-    $ python setup.py install
+    $ sudo python setup.py install
     $ cd test
     $ python test_lzma.py
 
