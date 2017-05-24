@@ -128,12 +128,10 @@ install:
   # precompiled with binaries for 32-bit and 64-bit x86.
   - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
   - "7z x xz-5.2.3-windows.7z -oC:/Users/appveyor/"
-  - ps: "ls \"C:/Users/appveyor/include\""
 
-  # Debugging to see where setup.py will check for the headers...
-  - "python -c \"import sys; print(sys.prefix)\""
-  - "python -c \"import os; print(os.path.expanduser('~'))\""
-  - "python -c \"import os; print(os.listdir(os.path.join(os.path.expanduser('~'), 'include')))\""
+  # TODO This needs to be conditional on target Python arch,
+  - "md C:/Users/appveyor/lib/"
+  - "cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
 
 build_script:
   # Build the compiled extension
