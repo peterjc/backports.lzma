@@ -129,6 +129,10 @@ install:
   - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
   - "7z x xz-5.2.3-windows.7z"
 
+  # Debugging to see where setup.py will check for the headers...
+  - "python -c 'import sys; print(sys.prefix)'"
+  - "python -c 'import os; os.path.expanduser(\'~\')'"
+
 build_script:
   # Build the compiled extension
   - "%CMD_IN_ENV% python setup.py build"
