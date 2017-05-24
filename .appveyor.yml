@@ -132,6 +132,7 @@ install:
   # Debugging to see where setup.py will check for the headers...
   - "python -c \"import sys; print(sys.prefix)\""
   - "python -c \"import os; print(os.path.expanduser('~'))\""
+  - "python -c \"import os; print(os.listdir(os.path.join(os.path.expanduser('~'), 'include')))\""
 
 build_script:
   # Build the compiled extension
