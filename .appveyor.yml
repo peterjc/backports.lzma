@@ -127,7 +127,7 @@ install:
   # Our big dependency is the XZ Utils C library, thankfully available
   # precompiled with binaries for 32-bit and 64-bit x86.
   - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
-  - "7z x xz-5.2.3-windows.7z"
+  - "7z x xz-5.2.3-windows.7z -oC:/Users/appveyor/"
   - ps: "pwd"
   - ps: "ls include"
   - ECHO "~/include:"
