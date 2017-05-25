@@ -124,16 +124,15 @@ install:
   # target Python version and architecture
   - "%CMD_IN_ENV% pip install -r dev-requirements.txt"
 
-  # Our big dependency is the XZ Utils C library, thankfully available
-  # precompiled with binaries for 32-bit and 64-bit x86.
-  - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
-  - "7z x xz-5.2.3-windows.7z -oC:/Users/appveyor/"
-  # That created C:/Users/appveyor/include/lzma.h etc.
-  - "md C:\\Users\\appveyor\\lib"
-  - if "%PYTHON_ARCH%"=="32" cp C:/Users/appveyor/bin_i686/liblzma.* C:/Users/appveyor/lib/"
-  - if "%PYTHON_ARCH%"=="64" cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
-  - "%CMD_IN_ENV% pexports C:/Users/appveyor/lib/liblzma.dll > C:/Users/appveyor/lib/liblzma.exp"
-  - "%CMD_IN_ENV% lib /def:C:/Users/appveyor/lib/liblzma.exp /out:C:/Users/appveyor/lib/liblzma.lib"
+  # Our big dependency is the XZ Utils C library, which is available
+  # precompiled with binaries for 32-bit and 64-bit x86, but lacks .lib files.
+  # So, we'll build it locally instead.
+  - "cd %HOME%"
+  - "curl -L -O https://tukaani.org/xz/xz-5.2.3.tar.bz2"
+  - "7z x xz-5.2.3.tar.bz2"
+  - "configure --enable-static --disable-shared --disable-rpath --disable-lzma-links --prefix=%HOME%"
+  - "make"
+  - "make install"
 
 build_script:
   # Build the compiled extension
