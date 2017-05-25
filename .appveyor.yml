@@ -128,10 +128,10 @@ install:
   # precompiled with binaries for 32-bit and 64-bit x86.
   - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
   - "7z x xz-5.2.3-windows.7z -oC:/Users/appveyor/"
-
-  # TODO This needs to be conditional on target Python arch,
+  # That created C:/Users/appveyor/include/lzma.h etc.
   - "md C:/Users/appveyor/lib/"
-  - "cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
+  - if "%PYTHON_ARCH%"=="32" cp C:/Users/appveyor/bin_i686/liblzma.* C:/Users/appveyor/lib/"
+  - if "%PYTHON_ARCH%"=="64" cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
 
 build_script:
   # Build the compiled extension
