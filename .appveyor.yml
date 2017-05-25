@@ -124,6 +124,11 @@ install:
   # target Python version and architecture
   - "%CMD_IN_ENV% pip install -r dev-requirements.txt"
 
+  # We will need pexports to make liblzma.lib from liblzma.dll
+  - "curl -L -O https://downloads.sourceforge.net/project/mingw/MinGW/Extension/pexports/pexports-0.47/pexports-0.47-mingw32-bin.tar.xz"
+  - "7z x pexports-0.47-mingw32-bin.tar.xz"
+  - "7z x pexports-0.47-mingw32-bin.tar -oC:/Users/appveyor/"
+
   # Our big dependency is the XZ Utils C library, thankfully available
   # precompiled with binaries for 32-bit and 64-bit x86.
   - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
@@ -132,7 +137,7 @@ install:
   - "md C:\\Users\\appveyor\\lib"
   - if "%PYTHON_ARCH%"=="32" cp C:/Users/appveyor/bin_i686/liblzma.* C:/Users/appveyor/lib/"
   - if "%PYTHON_ARCH%"=="64" cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
-  - "%CMD_IN_ENV% C:/MinGW/bin/pexports C:/Users/appveyor/lib/liblzma.dll > C:/Users/appveyor/lib/liblzma.exp"
+  - C:/Users/appveyor/bin/pexports C:/Users/appveyor/lib/liblzma.dll > C:/Users/appveyor/lib/liblzma.exp"
   - "%CMD_IN_ENV% lib /def:C:/Users/appveyor/lib/liblzma.exp /out:C:/Users/appveyor/lib/liblzma.lib"
 
 build_script:
