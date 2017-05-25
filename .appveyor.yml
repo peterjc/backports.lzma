@@ -129,7 +129,7 @@ install:
   - "curl -L -O https://tukaani.org/xz/xz-5.2.3-windows.7z"
   - "7z x xz-5.2.3-windows.7z -oC:/Users/appveyor/"
   # That created C:/Users/appveyor/include/lzma.h etc.
-  - "mkdir C:/Users/appveyor/lib/"
+  - "md C:\\Users\\appveyor\\lib"
   - if "%PYTHON_ARCH%"=="32" cp C:/Users/appveyor/bin_i686/liblzma.* C:/Users/appveyor/lib/"
   - if "%PYTHON_ARCH%"=="64" cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
   - "%CMD_IN_ENV% gendef C:/Users/appveyor/lib/liblzma.dll"
