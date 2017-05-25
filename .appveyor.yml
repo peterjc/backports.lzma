@@ -132,7 +132,7 @@ install:
   - "md C:\\Users\\appveyor\\lib"
   - if "%PYTHON_ARCH%"=="32" cp C:/Users/appveyor/bin_i686/liblzma.* C:/Users/appveyor/lib/"
   - if "%PYTHON_ARCH%"=="64" cp C:/Users/appveyor/bin_x86-64/liblzma.* C:/Users/appveyor/lib/"
-  - "%CMD_IN_ENV% pexports C:/Users/appveyor/lib/liblzma.dll > C:/Users/appveyor/lib/liblzma.exp"
+  - "%CMD_IN_ENV% C:/MinGW/bin/pexports C:/Users/appveyor/lib/liblzma.dll > C:/Users/appveyor/lib/liblzma.exp"
   - "%CMD_IN_ENV% lib /def:C:/Users/appveyor/lib/liblzma.exp /out:C:/Users/appveyor/lib/liblzma.lib"
 
 build_script:
