@@ -76,7 +76,6 @@ This should find the XZ Util header file and library automatically (and will
 check for a local install under your home directory). You should now be able
 to import the backport from Python as shown below.
 
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 If you are trying to install this under the system Python, you will need
 admin rights and replace ``python setup.py install`` with
 ``sudo python setup.py install`` instead.
