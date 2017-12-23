@@ -29,6 +29,14 @@ print("This is backports.lzma version %s" % __version__)
 
 lzmalib = '%slzma'%('lib' if sys.platform == 'win32' else '')
 
+class build_ext_subclass(build_ext):
+    def build_extensions(self):
+        c = self.compiler.compiler_type
+        if c == "mingw32" and sys.maxsize <= 2**32:
+           for e in self.extensions:
+               e.extra_compile_args = ["-mstackrealign"]
+        build_ext.build_extensions(self)
+
 packages = ["backports", "backports.lzma"]
 prefix = sys.prefix
 home = os.path.expanduser("~")
@@ -87,6 +95,6 @@ setup(
     namespace_packages = ['backports'],
     ext_modules = extens,
     cmdclass = {
-        'build_ext': build_ext,
+        'build_ext': build_ext_subclass,
     },
 )
