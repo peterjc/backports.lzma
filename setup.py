@@ -27,12 +27,14 @@ if __version__ is None:
     sys.exit(1)
 print("This is backports.lzma version %s" % __version__)
 
+lzmalib = '%slzma'%('lib' if sys.platform == 'win32' else '')
+
 packages = ["backports", "backports.lzma"]
 prefix = sys.prefix
 home = os.path.expanduser("~")
 extens = [Extension('backports.lzma._lzma',
                     ['backports/lzma/_lzmamodule.c'],
-                    libraries = ['lzma'],
+                    libraries = [lzmalib],
                     include_dirs = [
                         os.path.join(prefix, 'include'),
                         os.path.join(home, 'include'),
