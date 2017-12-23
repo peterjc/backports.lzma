@@ -1,0 +1,74 @@
+clone_folder: C:\projects\backports.lzma
+
+shallow_clone: true
+
+environment:
+  matrix:
+
+    # We don't have a vs2008 build of xz on Windows, so we skip that for py27
+    - PYTHON_VERSION: "2.7"
+      PYTHON_ARCH: "64"
+      DISTUTILS_COMPILER: "mingw32"
+
+    - PYTHON_VERSION: "2.7"
+      PYTHON_ARCH: "32"
+      DISTUTILS_COMPILER: "mingw32"
+
+    # We have a vs2015 build of xz on Windows, so we test against that for py36
+    - PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "64"
+      DISTUTILS_COMPILER: "msvc"
+
+    - PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "32"
+      DISTUTILS_COMPILER: "msvc"
+
+    - PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "64"
+      DISTUTILS_COMPILER: "mingw32"
+
+    - PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "32"
+      DISTUTILS_COMPILER: "mingw32"
+
+init:
+  - ECHO %PYTHON_VERSION% %PYTHON_ARCH% %HOME%
+
+build_script:
+  # If there is a newer build queued for the same PR, cancel this one.
+  # The AppVeyor 'rollout builds' option is supposed to serve the same
+  # purpose but it is problematic because it tends to cancel builds pushed
+  # directly to master instead of just PR builds (or the converse).
+  # credits: JuliaLang developers.
+  - ps: if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+      https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+      Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+        throw "There are newer queued builds for this pull request, failing early." }
+
+  # Need this for correct path to Miniconda setup
+  - if "%PYTHON_VERSION%" == "3.6" set BASE_PYTHON_VERSION=36
+  - if "%PYTHON_ARCH%" == "64" set ARCH_LABEL=-x64
+  - C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%\Scripts\activate
+
+  # Now that we have conda in path, let's go to the project directory
+  - cd /d C:\projects\backports.lzma
+
+  # In case I forget -y to any conda commands
+  - conda config --system --set always_yes true
+
+  # This is where the Visual Studio build of liblzma.lib will go
+  - set LIBRARY_PREFIX=%CONDA_PREFIX%\Library
+
+  # This is where the mingw-64 build of liblzma.lib will go
+  - if "%DISTUTILS_COMPILER%" == "mingw32" set LIBRARY_PREFIX=%LIBRARY_PREFIX%\mingw-w64
+
+  # Let's install the toolchain and the package that will provide liblzma
+  - if "%DISTUTILS_COMPILER%" == "mingw32" conda install -y libpython m2w64-toolchain m2w64-xz
+  - if "%DISTUTILS_COMPILER%" == "msvc" conda install -y xz
+  - python setup.py build_ext --include-dirs %LIBRARY_PREFIX%\include --library-dirs %LIBRARY_PREFIX%\lib -c%DISTUTILS_COMPILER%
+  - python setup.py install
+  - python setup.py clean --all
+
+  # Let's put this to test
+  - if "%PYTHON_VERSION%" == "2.7" conda install future
+  - python test\test_lzma.py
