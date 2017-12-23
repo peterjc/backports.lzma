@@ -30,7 +30,7 @@ print("This is backports.lzma version %s" % __version__)
 packages = ["backports", "backports.lzma"]
 prefix = sys.prefix
 home = os.path.expanduser("~")
-extens = [Extension('backports/lzma/_lzma',
+extens = [Extension('backports.lzma._lzma',
                     ['backports/lzma/_lzmamodule.c'],
                     libraries = ['lzma'],
                     include_dirs = [
