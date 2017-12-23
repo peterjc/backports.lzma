@@ -8,8 +8,12 @@ try:
     # Try the location used on Python 3 first,
     from test.support import _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
 except ImportError:
-    # Must be under Python 2 then,
-    from test.test_support import _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
+    try:
+        # May be < Python 2.7.14
+        from test.test_support import _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
+    except ImportError:
+        # May be >=Python 2.7.14, <3
+        from future.backports.test.support import _4G, TESTFN, import_module, bigmemtest, run_unittest, unlink
 
 import inspect
 if "size" not in inspect.getargspec(bigmemtest).args:
