@@ -29,13 +29,24 @@ print("This is backports.lzma version %s" % __version__)
 
 lzmalib = '%slzma'%('lib' if sys.platform == 'win32' else '')
 
+is32bit = tuple.__itemsize__ == 4
+
+
 class build_ext_subclass(build_ext):
     def build_extensions(self):
-        c = self.compiler.compiler_type
-        if c == "mingw32" and sys.maxsize <= 2**32:
-           for e in self.extensions:
-               e.extra_compile_args = ["-mstackrealign"]
+        xtra_compile_args = []
+
+        if self.compiler.compiler_type == "mingw32":
+            xtra_compile_args = [
+                       "-DMS_WIN32",
+                       "-mstackrealign"
+                       ] if is32bit else ["-DMS_WIN64"]
+
+        for e in self.extensions:
+            e.extra_compile_args = xtra_compile_args
+
         build_ext.build_extensions(self)
+
 
 packages = ["backports", "backports.lzma"]
 prefix = sys.prefix
