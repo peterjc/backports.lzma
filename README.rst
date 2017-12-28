@@ -1,3 +1,13 @@
+.. image:: https://img.shields.io/pypi/v/backports.lzma.svg
+   :alt: Biopython on the Python Package Index (PyPI)
+   :target: https://pypi.python.org/pypi/backports.lzma
+.. image:: https://img.shields.io/travis/peterjc/backports.lzma/master.svg
+   :alt: Linux testing with TravisCI
+   :target: https://travis-ci.org/peterjc/backports.lzma/branches
+.. image:: https://img.shields.io/appveyor/ci/peterjc/backports-lzma/master.svg
+   :alt: Windows testing with AppVeyor
+   :target: https://ci.appveyor.com/project/peterjc/backports-lzma/history
+
 Introduction
 ============
 
@@ -31,7 +41,8 @@ operating systems, so in theory so too should this backport:
 
 * Mac OS X: Tested under Python 2.6, 2.7, 3.0 to 3.4 inclusive
 * Linux: Tested under Python 2.6, 2.7, 3.0 to 3.6 inclusive
-* Windows: Untested (so far)
+* Windows: Tested under Python 2.7, 3.6 covering 32-bit and 64-bit,
+  and MSVC and mingw32 compilers
 
 Other than some minor changes in the exceptions for some errors, based on the
 unit tests everything seems to be working fine.
@@ -138,6 +149,9 @@ Revisions
  * v0.0.8 - February 2017
     * Switch to using ``README.rst`` for this document in order to display
       nicely on PyPI.
+ * v0.0.9 - Pending
+    * Now compiles under Windows with passing tests, checked under AppVeyor
+      (see GitHub pull request #25).
 
 
 Contributors
