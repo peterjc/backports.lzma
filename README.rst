@@ -1,6 +1,12 @@
 .. image:: https://img.shields.io/pypi/v/backports.lzma.svg
-   :alt: Biopython on the Python Package Index (PyPI)
+   :alt: Package on Python Package Index (PyPI)
    :target: https://pypi.python.org/pypi/backports.lzma
+.. image:: https://img.shields.io/conda/vn/conda-forge/backports.lzma.svg
+   :alt: Conda package from Anaconda (default) channel
+   :target: https://anaconda.org/anaconda/backports.lzma
+.. image:: https://img.shields.io/conda/vn/anaconda/backports.lzma.svg
+   :alt: Conda package from conda-forge channel
+   :target: https://anaconda.org/conda-forge/backports.lzma
 .. image:: https://img.shields.io/travis/peterjc/backports.lzma/master.svg
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/peterjc/backports.lzma/branches
