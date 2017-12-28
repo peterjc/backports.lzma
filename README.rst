@@ -157,7 +157,7 @@ Revisions
       nicely on PyPI.
  * v0.0.9 - Pending
     * Now compiles under Windows with passing tests, checked under AppVeyor
-      (see GitHub pull request #25).
+      (see GitHub pull request #25 by Nehal J Wani).
 
 
 Contributors
@@ -169,7 +169,7 @@ work, it was backported to also run on Python 2.6, 2.7 and 3.0, 3.1 and 3.2 by
 Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
-Ralph Bean, Deroko, John Kirkham.
+Ralph Bean, Deroko, John Kirkham, Nehal J Wani.
 
 
 Bug Reports
