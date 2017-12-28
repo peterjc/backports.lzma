@@ -215,5 +215,13 @@ Automated Testing
 TravisCI is being used for continuous integration testing under Linux, see
 https://travis-ci.org/peterjc/backports.lzma
 
-.. image:: https://secure.travis-ci.org/peterjc/backports.lzma.png?branch=master
-    :target: https://travis-ci.org/peterjc/backports.lzma/builds
+.. image:: https://img.shields.io/travis/peterjc/backports.lzma/master.svg
+   :alt: Linux testing with TravisCI
+   :target: https://travis-ci.org/peterjc/backports.lzma/branches
+
+Similarly, AppVeyor is being used for testing under Windows, see:
+https://ci.appveyor.com/project/peterjc/backports-lzma/history
+
+.. image:: https://img.shields.io/appveyor/ci/peterjc/backports-lzma/master.svg
+   :alt: Windows testing with AppVeyor
+   :target: https://ci.appveyor.com/project/peterjc/backports-lzma/history
