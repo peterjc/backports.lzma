@@ -69,12 +69,10 @@ extens = [Extension('backports.lzma._lzma',
                     )]
 
 descr = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files."
-long_descr = """This is a backport of the 'lzma' module included in Python 3.3 or later
-by Nadeem Vawda and Per Oyvind Karlsen, which provides a Python wrapper for XZ Utils
-(aka LZMA Utils v2) by Igor Pavlov.
 
-In order to compile this, you will need to install XZ Utils from http://tukaani.org/xz/
-"""
+# Load in our reStructuredText README.rst file to pass explicitly in the metadata
+with open("README.rst") as handle:
+    long_descr = handle.read()
 
 if sys.version_info < (2,6):
     sys.stderr.write("ERROR: Python 2.5 and older are not supported, and probably never will be.\n")
