@@ -212,7 +212,10 @@ Tags must explicitly be pushed to GitHub::
 I then use the following to upload a new release to the Python Packaging Index
 (PyPI)::
 
-    $ python setup.py register sdist upload
+    $ python setup.py sdist
+    $ twine upload dist/backports.lzma-X.X.X.tar.gz
+
+If not already installed, try ``pip install twine``.
 
 The update then appears on http://pypi.python.org/pypi/backports.lzma/
 
