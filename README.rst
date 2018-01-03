@@ -17,14 +17,14 @@
 Introduction
 ============
 
-Python 3.3 onwards includes in the standard library module 'lzma', providing
-support for working with LZMA and XZ compressed files via the XZ Utils C
-library (XZ Utils is in a sense LZMA v2). See:
+Python 3.3 onwards includes in the standard library module ``lzma``,
+providing support for working with LZMA and XZ compressed files via
+the XZ Utils C library (XZ Utils is in a sense LZMA v2). See:
 
 * Python's lzma - http://docs.python.org/dev/library/lzma.html
 * XZ Utils - http://tukaani.org/xz/
 
-This code is a backport of the Python 3.3 standard library module 'lzma' for
+This code is a backport of the Python 3.3 standard library module ``lzma`` for
 use on older versions of Python where it was not included. It is available
 from PyPI (released downloads only) and GitHub (repository):
 
@@ -42,7 +42,7 @@ both using LZMA Utils (not XZ Utils, so they have no XZ support).
 Supported Platforms
 ===================
 
-The 'lmza' module provided with Python 3.3 should work on all the main
+The ``lmza`` module provided with Python 3.3 should work on all the main
 operating systems, so in theory so too should this backport:
 
 * Mac OS X: Tested under Python 2.6, 2.7, 3.0 to 3.4 inclusive
@@ -76,8 +76,13 @@ Otherwise do this from source, this is what I do on Mac OS X::
     $ make check
     $ make install
 
-Now you can install this 'lzma' backport. First download and decompress the
-source code, or clone the github repository::
+Now you can install this ``lzma`` backport. If using ``pip``, this should
+work::
+
+    $ pip install backports.lzma
+
+Otherwise, you can compile this the old fashioned way. First download and
+decompress the source code, or clone the github repository::
 
     $ git clone git://github.com/peterjc/backports.lzma.git
     $ cd backports.lzma
@@ -111,19 +116,19 @@ library provided lzma if present::
     #Then use lzma as normal, for example:
     assert b"Hello!" == lzma.decompress(lzma.compress(b"Hello!"))
 
-Please refer to the 'lzma' documentation online:
+Please refer to the ``lzma`` documentation online:
 http://docs.python.org/dev/library/lzma.html
 
-Note that while 'lzma' should be available on Python 3.3, you can still
+Note that while ``lzma`` should be available on Python 3.3, you can still
 install the backport. This is useful for two reasons, first testing the two
 act the same way, and second it is possible that your Python installation
-lacks the standard library 'lzma'. This can happen if Python was installed
+lacks the standard library ``lzma``. This can happen if Python was installed
 from source and XZ Utils was not available. If this was a systems level Python
 install, as a user you could still install XZ Utils and this backport under
 your own account.
 
-This is using the shared 'backports' namespace introduced by Brandon Rhodes as
-documented here: http://pypi.python.org/pypi/backports/ and
+This is using the shared ``backports`` namespace introduced by Brandon Rhodes
+as documented here: http://pypi.python.org/pypi/backports/ and
 http://bitbucket.org/brandon/backports
 
 
@@ -155,7 +160,7 @@ Revisions
  * v0.0.8 - February 2017
     * Switch to using ``README.rst`` for this document in order to display
       nicely on PyPI.
- * v0.0.9 - Pending
+ * v0.0.9 - January 2018
     * Now compiles under Windows with passing tests, checked under AppVeyor
       (see GitHub pull request #25 by Nehal J Wani).
 
@@ -180,10 +185,13 @@ https://github.com/peterjc/backports.lzma/issues including details about
 your operating system, version of Python, XY Utils, the lzma backport etc.
 Reproducible test cases are particularly helpful.
 
-If you can demonstrate a problem in this backport but not in the 'lzma' module
-included with Python 3.3 or later, then it is clearly something we will need
-to fix. Any issues in the 'lzma' module as bundled with Python 3.3 or later
-should be reported to the Python project at http://bugs.python.org instead.
+If you can demonstrate a problem in this backport but not in the ``lzma``
+module included with Python 3.3 or later, then it is clearly something we
+will need to fix.
+
+Any issues in the ``lzma`` module as bundled with Python 3.3 or later
+should be reported to the Python project at http://bugs.python.org instead
+(and we can hopefully apply any official fix to the backport as well).
 
 
 Release Process
