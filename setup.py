@@ -35,7 +35,8 @@ class build_ext_subclass(build_ext):
         xtra_compile_args = []
 
         if self.compiler.compiler_type == "mingw32":
-            is32bit = tuple.__itemsize__ == 4
+            # https://docs.python.org/3/library/platform.html#cross-platform
+            is32bit = sys.maxsize <= 2**32
             xtra_compile_args = [
                        "-DMS_WIN32",
                        "-mstackrealign"
