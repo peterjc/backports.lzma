@@ -29,14 +29,13 @@ print("This is backports.lzma version %s" % __version__)
 
 lzmalib = '%slzma'%('lib' if sys.platform == 'win32' else '')
 
-is32bit = tuple.__itemsize__ == 4
-
 
 class build_ext_subclass(build_ext):
     def build_extensions(self):
         xtra_compile_args = []
 
         if self.compiler.compiler_type == "mingw32":
+            is32bit = tuple.__itemsize__ == 4
             xtra_compile_args = [
                        "-DMS_WIN32",
                        "-mstackrealign"
