@@ -9,7 +9,6 @@ python:
   - "3.6"
   - "nightly"
   - "pypy"
-  - "pypy3"
 sudo: false
 addons:
   apt:
