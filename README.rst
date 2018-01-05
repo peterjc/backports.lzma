@@ -68,7 +68,7 @@ distribution can be done in one line::
 
 Otherwise do this from source, this is what I do on Mac OS X::
 
-    $ curl -O http://tukaani.org/xz/xz-5.0.4.tar.gz
+    $ curl -L -O http://tukaani.org/xz/xz-5.0.4.tar.gz
     $ tar -zxvf xz-5.0.4.tar.gz
     $ cd xz-5.0.4
     $ ./configure --prefix=$HOME
