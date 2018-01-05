@@ -8,6 +8,14 @@ python:
   - "3.5"
   - "3.6"
   - "nightly"
+  - "pypy"
+  - "pypy3"
+matrix:
+  allow_failures:
+  - python: "pypy"
+  - python: "pypy3"
+  fast_finish: true
+
 sudo: false
 addons:
   apt:
