@@ -163,6 +163,9 @@ Revisions
  * v0.0.9 - January 2018
     * Now compiles under Windows with passing tests, checked under AppVeyor
       (see GitHub pull request #25 by Nehal J Wani).
+ * v0.0.10 - January 2018
+    * Fixes PyPy support, accidentally broken in v0.0.9 (see GitHub pull
+      request #27 by Michał Górny).
 
 
 Contributors
@@ -174,7 +177,7 @@ work, it was backported to also run on Python 2.6, 2.7 and 3.0, 3.1 and 3.2 by
 Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
-Ralph Bean, Deroko, John Kirkham, Nehal J Wani.
+Ralph Bean, Deroko, John Kirkham, Nehal J Wani, Michał Górny.
 
 
 Bug Reports
