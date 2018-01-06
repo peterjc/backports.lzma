@@ -469,6 +469,16 @@ parse_filter_chain_spec(lzma_filter filters[], PyObject *filterspecs)
 {
     Py_ssize_t i, num_filters;
 
+    /* PySequence_Length() is not guaranteed to return error
+       for non-sequence types, and it does not in PyPy.
+       https://bugs.python.org/issue32500
+    */
+    if (PySequence_Check(filterspecs) == 0) {
+        PyErr_Format(PyExc_TypeError,
+                     "Filter list is not of sequence type");
+        return -1;
+    }
+
     num_filters = PySequence_Length(filterspecs);
     if (num_filters == -1)
         return -1;
