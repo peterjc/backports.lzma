@@ -57,6 +57,9 @@ Support under Python 2.6 and 2.7 appears to be working in that all the
 appropriate unit tests now pass. Supporting older verions of Python 2 is
 probably going to be too much work.
 
+We now also support the PyPy implementation of Python 2.7, currently tested
+with PyPy 5.8.0. The PyPy implementation of Python 3 does not currently work.
+
 
 Installation
 ============
@@ -160,12 +163,13 @@ Revisions
  * v0.0.8 - February 2017
     * Switch to using ``README.rst`` for this document in order to display
       nicely on PyPI.
- * v0.0.9 - January 2018
+ * v0.0.9 - 3 January 2018
     * Now compiles under Windows with passing tests, checked under AppVeyor
       (see GitHub pull request #25 by Nehal J Wani).
- * v0.0.10 - January 2018
-    * Fixes PyPy installation, accidentally broken in v0.0.9 (see GitHub pull
-      request #27 by Michał Górny).
+ * v0.0.10 - 8 January 2018
+    * Now supports PyPy (specifically their Python 2 implementation, but not
+      yet pypy3 which implements Python 3; see GitHub pull requests #27 and
+      #29 by Michał Górny).
 
 
 Contributors
