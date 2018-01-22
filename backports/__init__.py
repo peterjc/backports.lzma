@@ -6,9 +6,5 @@
 # A Python "namespace package" http://www.python.org/dev/peps/pep-0382/
 # This always goes inside of a namespace package's __init__.py
 
-try:
-    import pkg_resources
-    pkg_resources.declare_namespace(__name__)
-except ImportError:
-    import pkgutil
-    __path__ = pkgutil.extend_path(__path__, __name__)
+from pkgutil import extend_path
+__path__ = extend_path(__path__, __name__)
