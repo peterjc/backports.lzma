@@ -101,7 +101,6 @@ setup(
         'Topic :: System :: Archiving :: Compression',
     ],
     packages = packages,
-    namespace_packages = ['backports'],
     ext_modules = extens,
     cmdclass = {
         'build_ext': build_ext_subclass,
