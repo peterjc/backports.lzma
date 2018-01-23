@@ -20,6 +20,12 @@ addons:
   apt:
     packages:
     - liblzma-dev
+before_install:
+  - "echo 'Installing other backports to check no conflicts...'"
+  - "pip install backports.functools_partialmethod"
+  - "python -c 'from backports.functools_partialmethod import partialmethod'"
+  - "pip install backports.ssl"
+  - "python -c 'from backports.ssl import match_hostname, __version__; print(__version__)'"
 install:
   - "python setup.py install"
 before_script:
@@ -29,3 +35,6 @@ script:
   - "echo 'Checking no conflict with other backports...'"
   - "pip install backports.ssl_match_hostname"
   - "python -c 'from backports.ssl_match_hostname import match_hostname, __version__; print(__version__)'"
+  - "pip install backports.csv"
+  - "python -c 'from backports.cvs import list_dialects, __version__; print(__version__)'"
+  - "python -c 'from backports.lzma import __version__; print(__version__)'"
