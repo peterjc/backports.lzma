@@ -26,3 +26,6 @@ before_script:
   - "cd test"
 script:
   - "python test_lzma.py"
+  - "echo 'Checking no conflict with other backports...'"
+  - "pip install backports.ssl_match_hostname"
+  - "python -c 'from backports.ssl_match_hostname import match_hostname, __version__; print(__version__)'"
