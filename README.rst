@@ -58,7 +58,8 @@ appropriate unit tests now pass. Supporting older verions of Python 2 is
 probably going to be too much work.
 
 We now also support the PyPy implementation of Python 2.7, currently tested
-with PyPy 5.8.0. The PyPy implementation of Python 3 does not currently work.
+with PyPy 5.8.0. It does not currently work on the  PyPy implementation of
+Python 3, but that comes with the ``lzma`` standard library module anyway.
 
 
 Installation
@@ -185,7 +186,7 @@ Revisions
     * Now supports PyPy (specifically their Python 2 implementation, but not
       yet pypy3 which implements Python 3; see GitHub pull requests #27 and
       #29 by Michał Górny).
- * v0.0.11 - Pending
+ * v0.0.11 - 16 May 2018
     * Should address namespace issues in v0.0.4, v0.0.5 and v0.0.6 related to
       a problem in setuptools, and causing side effects with other backports
       (see pull request #32 from Toshio Kuratomi, and issues #8, #16 and #28).
