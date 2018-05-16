@@ -67,7 +67,7 @@ Installation
 
 I recommend the Conda packaging system which supports Linux, MacOS and
 Windows. Thanks to the ``conda-forge`` package you should be able to install
-this library with one line, and have the dependencies handled automatically:
+this library with one line, and have the dependencies handled automatically::
 
     $ conda install -c conda-forge backports.lzma
 
