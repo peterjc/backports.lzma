@@ -154,42 +154,42 @@ http://bitbucket.org/brandon/backports
 Revisions
 =========
 
- * v0.0.1 - January 2013
-    * First public release
- * v0.0.2 - April 2013
-    * Fix the seekable attribute on Python 2 (Tomer Chachamu)
-    * More search paths for lib/include headers (Wynn Wilkes)
- * v0.0.3 - June 2014
-    * Supports unicode filenames on Python 2 (Irving Reid)
- * v0.0.4 - September 2014
-    * Declare namespace package to avoid warnings (Ralph Bean)
-      (Later retracted from PyPI due to installation problems with
-      ``setuptools`` versus ``distutils``, see GitHub issue #8 and #9).
- * v0.0.5 - June 2016
-    * Backported fix for Python Issue 19839 to ignore non-LZMA trailing data
-      (original Python 3.5.1 patch by Nadeem Vawda, backported by Deroko, see
-      GitHub pull request #5).
- * v0.0.6 - June 2016
-    * Updated namespace packaging declaration now required by more recent
-      versions of setuptools which prevented simple installation of v0.0.4
-      and v0.0.5 from PyPI.
- * v0.0.7 - February 2017
-    * Check and prefer the ``sys.prefix`` at installation time to find the
-      ``lib`` and ``include`` headers (John Kirkham).
- * v0.0.8 - February 2017
-    * Switch to using ``README.rst`` for this document in order to display
-      nicely on PyPI.
- * v0.0.9 - 3 January 2018
-    * Now compiles under Windows with passing tests, checked under AppVeyor
-      (see GitHub pull request #25 by Nehal J Wani).
- * v0.0.10 - 8 January 2018
-    * Now supports PyPy (specifically their Python 2 implementation, but not
-      yet pypy3 which implements Python 3; see GitHub pull requests #27 and
-      #29 by Michał Górny).
- * v0.0.11 - 16 May 2018
-    * Should address namespace issues in v0.0.4, v0.0.5 and v0.0.6 related to
-      a problem in setuptools, and causing side effects with other backports
-      (see pull request #32 from Toshio Kuratomi, and issues #8, #16 and #28).
+* v0.0.1 - January 2013
+   * First public release
+* v0.0.2 - April 2013
+   * Fix the seekable attribute on Python 2 (Tomer Chachamu)
+   * More search paths for lib/include headers (Wynn Wilkes)
+* v0.0.3 - June 2014
+   * Supports unicode filenames on Python 2 (Irving Reid)
+* v0.0.4 - September 2014
+   * Declare namespace package to avoid warnings (Ralph Bean)
+     (Later retracted from PyPI due to installation problems with
+     ``setuptools`` versus ``distutils``, see GitHub issue #8 and #9).
+* v0.0.5 - June 2016
+   * Backported fix for Python Issue 19839 to ignore non-LZMA trailing data
+     (original Python 3.5.1 patch by Nadeem Vawda, backported by Deroko, see
+     GitHub pull request #5).
+* v0.0.6 - June 2016
+   * Updated namespace packaging declaration now required by more recent
+     versions of setuptools which prevented simple installation of v0.0.4
+     and v0.0.5 from PyPI.
+* v0.0.7 - February 2017
+   * Check and prefer the ``sys.prefix`` at installation time to find the
+     ``lib`` and ``include`` headers (John Kirkham).
+* v0.0.8 - February 2017
+   * Switch to using ``README.rst`` for this document in order to display
+     nicely on PyPI.
+* v0.0.9 - 3 January 2018
+   * Now compiles under Windows with passing tests, checked under AppVeyor
+     (see GitHub pull request #25 by Nehal J Wani).
+* v0.0.10 - 8 January 2018
+   * Now supports PyPy (specifically their Python 2 implementation, but not
+     yet pypy3 which implements Python 3; see GitHub pull requests #27 and
+     #29 by Michał Górny).
+* v0.0.11 - 16 May 2018
+   * Should address namespace issues in v0.0.4, v0.0.5 and v0.0.6 related to
+     a problem in setuptools, and causing side effects with other backports
+     (see pull request #32 from Toshio Kuratomi, and issues #8, #16 and #28).
 
 Contributors
 ============
