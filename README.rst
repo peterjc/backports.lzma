@@ -185,7 +185,10 @@ Revisions
     * Now supports PyPy (specifically their Python 2 implementation, but not
       yet pypy3 which implements Python 3; see GitHub pull requests #27 and
       #29 by Michał Górny).
-
+ * v0.0.11 - Pending
+    * Should address namespace issues in v0.0.4, v0.0.5 and v0.0.6 related to
+      a problem in setuptools, and causing side effects with other backports
+      (see pull request #32 from Toshio Kuratomi, and issues #8, #16 and #28).
 
 Contributors
 ============
@@ -196,7 +199,7 @@ work, it was backported to also run on Python 2.6, 2.7 and 3.0, 3.1 and 3.2 by
 Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
-Ralph Bean, Deroko, John Kirkham, Nehal J Wani, Michał Górny.
+Ralph Bean, Deroko, John Kirkham, Nehal J Wani, Michał Górny, Toshio Kuratomi.
 
 
 Bug Reports
