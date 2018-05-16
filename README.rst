@@ -64,8 +64,23 @@ with PyPy 5.8.0. The PyPy implementation of Python 3 does not currently work.
 Installation
 ============
 
-First you must install the XZ Utils C library, which on a Debian based Linux
-distribution can be done in one line::
+I recommend the Conda packaging system which supports Linux, MacOS and
+Windows. Thanks to the ``conda-forge`` package you should be able to install
+this library with one line, and have the dependencies handled automatically:
+
+    $ conda install -c conda-forge backports.lzma
+
+If you are on Linux, there is a good chance that the system packages will
+include this library and handle the dependencies, e.g. on RedHat/CentOS try::
+
+    $ sudo yum install python-backports-lzma
+
+Otherwise, first you must install the XZ Utils C library. On RedHat or
+CentOS Linux sytems, try::
+
+    $ sudo yum install xz-devel
+
+On a Debian based Linux distribution use::
 
     $ sudo apt-get install liblzma-dev
 
