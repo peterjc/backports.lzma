@@ -5,6 +5,7 @@
 # This file copyright (c) 2012 Peter Cock, p.j.a.cock@googlemail.com
 # See other files for separate copyright notices.
 
+from io import open
 import sys, os
 from warnings import warn
 
