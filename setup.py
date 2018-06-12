@@ -71,7 +71,7 @@ extens = [Extension('backports.lzma._lzma',
 descr = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files."
 
 # Load in our reStructuredText README.rst file to pass explicitly in the metadata
-with open("README.rst") as handle:
+with open("README.rst", encoding="UTF-8") as handle:
     long_descr = handle.read()
 
 if sys.version_info < (2,6):
