@@ -71,8 +71,12 @@ extens = [Extension('backports.lzma._lzma',
 descr = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files."
 
 # Load in our reStructuredText README.rst file to pass explicitly in the metadata
-with open("README.rst") as handle:
-    long_descr = handle.read()
+with open("README.rst", "rb") as handle:
+    # Only Python 3's open has an encoding argument.
+    # Opening in binary and doing decoding like this to work
+    # on both Python 2 and 3.
+    long_descr = handle.read().decode("utf-8")
+
 
 if sys.version_info < (2,6):
     sys.stderr.write("ERROR: Python 2.5 and older are not supported, and probably never will be.\n")

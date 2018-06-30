@@ -190,6 +190,10 @@ Revisions
    * Should address namespace issues in v0.0.4, v0.0.5 and v0.0.6 related to
      a problem in setuptools, and causing side effects with other backports
      (see pull request #32 from Toshio Kuratomi, and issues #8, #16 and #28).
+* v0.0.12 - 30 June 2018
+   * Fixes locale issue in ``setup.py`` under Python 3 (see #33 reported by
+     Ben Hearsum).
+
 
 Contributors
 ============
