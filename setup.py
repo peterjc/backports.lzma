@@ -6,12 +6,14 @@
 # See other files for separate copyright notices.
 
 import sys, os
-from warnings import warn
 
-from distutils import log
-from distutils.command.build_ext import build_ext
-from distutils.core import setup
-from distutils.extension import Extension
+try:
+    from setuptools.command.build_ext import build_ext
+    from setuptools import setup, Extension
+except ImportError:
+    from distutils.command.build_ext import build_ext
+    from distutils.core import setup
+    from distutils.extension import Extension
 
 # We now extract the version number in backports/lzma/__init__.py
 # We can't use "from backports import lzma" then "lzma.__version__"
