@@ -21,6 +21,9 @@ addons:
     packages:
     - liblzma-dev
 install:
+  # On nightly, upgrade setuptools first to work around
+  # https://github.com/pypa/setuptools/issues/1257
+  - if [[ $TRAVIS_PYTHON_VERSION == 'nightly' ]]; then travis_retry pip install -U setuptools; fi
   - "python setup.py install"
 before_script:
   - "cd test"
