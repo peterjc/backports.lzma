@@ -193,6 +193,9 @@ Revisions
 * v0.0.12 - 30 June 2018
    * Fixes locale issue in ``setup.py`` under Python 3 (see #33 reported by
      Ben Hearsum).
+* v0.0.13 - 11 July 2018
+   * Use setuptools instead of distutils if available, useful for compiling
+     your own wheel or egg files (see #34 from @wiggin15).
 
 
 Contributors
