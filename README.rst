@@ -7,10 +7,10 @@
 .. image:: https://img.shields.io/conda/vn/anaconda/backports.lzma.svg
    :alt: Conda package from Anaconda (default) channel
    :target: https://anaconda.org/anaconda/backports.lzma
-.. image:: https://img.shields.io/travis/peterjc/backports.lzma/master.svg
+.. image:: https://img.shields.io/travis/peterjc/backports.lzma/master.svg?label=master&logo=travis
    :alt: Linux testing with TravisCI
    :target: https://travis-ci.org/peterjc/backports.lzma/branches
-.. image:: https://img.shields.io/appveyor/ci/peterjc/backports-lzma/master.svg
+.. image:: https://img.shields.io/appveyor/ci/peterjc/backports-lzma/master.svg?label=master&logo=CircleCI
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/peterjc/backports-lzma/history
 .. image:: https://img.shields.io/pypi/dm/backports-lzma.svg
