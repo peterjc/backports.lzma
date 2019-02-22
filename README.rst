@@ -13,6 +13,9 @@
 .. image:: https://img.shields.io/appveyor/ci/peterjc/backports-lzma/master.svg
    :alt: Windows testing with AppVeyor
    :target: https://ci.appveyor.com/project/peterjc/backports-lzma/history
+.. image:: https://img.shields.io/pypi/dm/backports-lzma.svg
+   :alt: PyPI downloads
+   :target: https://pypistats.org/packages/backports-lzma
 
 Introduction
 ============
