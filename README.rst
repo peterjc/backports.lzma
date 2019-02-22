@@ -141,9 +141,9 @@ library provided lzma if present::
 Please refer to the ``lzma`` documentation online:
 http://docs.python.org/dev/library/lzma.html
 
-Note that while ``lzma`` should be available on Python 3.3, you can still
-install the backport. This is useful for two reasons, first testing the two
-act the same way, and second it is possible that your Python installation
+Note that while ``lzma`` should be available on Python 3.3 onwards, you can
+still install the backport. This is useful for two reasons, first testing the
+two act the same way, and second it is possible that your Python installation
 lacks the standard library ``lzma``. This can happen if Python was installed
 from source and XZ Utils was not available. If this was a systems level Python
 install, as a user you could still install XZ Utils and this backport under
@@ -197,8 +197,8 @@ Revisions
    * Fixes locale issue in ``setup.py`` under Python 3 (see #33 reported by
      Ben Hearsum).
 * v0.0.13 - 11 July 2018
-   * Use setuptools instead of distutils if available, useful for compiling
-     your own wheel or egg files (see #34 from @wiggin15).
+   * Use ``setuptools`` instead of ``distutils`` if available, useful for
+     compiling your own wheel or egg files (see #34 from @wiggin15).
 
 
 Contributors
