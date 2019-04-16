@@ -14,7 +14,7 @@ environment:
       PYTHON_ARCH: "32"
       DISTUTILS_COMPILER: "mingw32"
 
-    # We have a vs2015 build of xz on Windows, so we test against that for py36
+    # We have a vs2015 build of xz on Windows, so we test against that for py>27
     - PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
       DISTUTILS_COMPILER: "msvc"
@@ -30,6 +30,23 @@ environment:
     - PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "32"
       DISTUTILS_COMPILER: "mingw32"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "64"
+      DISTUTILS_COMPILER: "msvc"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "32"
+      DISTUTILS_COMPILER: "msvc"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "64"
+      DISTUTILS_COMPILER: "mingw32"
+
+    - PYTHON_VERSION: "3.7"
+      PYTHON_ARCH: "32"
+      DISTUTILS_COMPILER: "mingw32"
+
 
 init:
   - ECHO %PYTHON_VERSION% %PYTHON_ARCH% %HOME%
@@ -47,6 +64,7 @@ build_script:
 
   # Need this for correct path to Miniconda setup
   - if "%PYTHON_VERSION%" == "3.6" set BASE_PYTHON_VERSION=36
+  - if "%PYTHON_VERSION%" == "3.7" set BASE_PYTHON_VERSION=37
   - if "%PYTHON_ARCH%" == "64" set ARCH_LABEL=-x64
   - C:\Miniconda%BASE_PYTHON_VERSION%%ARCH_LABEL%\Scripts\activate
 
