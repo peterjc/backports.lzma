@@ -80,13 +80,26 @@ build_script:
   # This is where the mingw-64 build of liblzma.lib will go
   - if "%DISTUTILS_COMPILER%" == "mingw32" set LIBRARY_PREFIX=%LIBRARY_PREFIX%\mingw-w64
 
+  # Let's install the packages required to build the wheel
+  - conda install -y pip setuptools wheel m2w64-ntldd-git
+
   # Let's install the toolchain and the package that will provide liblzma
   - if "%DISTUTILS_COMPILER%" == "mingw32" conda install -y libpython m2w64-toolchain m2w64-xz
   - if "%DISTUTILS_COMPILER%" == "msvc" conda install -y xz
-  - python setup.py build_ext --include-dirs %LIBRARY_PREFIX%\include --library-dirs %LIBRARY_PREFIX%\lib -c%DISTUTILS_COMPILER%
-  - python setup.py install
-  - python setup.py clean --all
+
+  # Nasty hack to enforce static linking of liblzma
+  - if "%DISTUTILS_COMPILER%" == "mingw32" move /Y %LIBRARY_PREFIX%\lib\liblzma.a %LIBRARY_PREFIX%\lib\liblzma.dll.a
+  - if "%DISTUTILS_COMPILER%" == "msvc" move /Y %LIBRARY_PREFIX%\lib\liblzma_static.lib %LIBRARY_PREFIX%\lib\liblzma.lib
+
+  # Time to build the wheel!
+  - pip wheel . --global-option=build_ext --global-option="-I%LIBRARY_PREFIX%\include" --global-option="-L%LIBRARY_PREFIX%\lib" --global-option --compiler=%DISTUTILS_COMPILER% --global-option --define="LZMA_API_STATIC"
+
+  # Install the wheel!
+  - for %%x in (dir *.whl) do pip install %%x
 
   # Let's put this to test
   - if "%PYTHON_VERSION%" == "2.7" conda install future
   - python test\test_lzma.py
+
+  # Confirm that there is no liblzma.dll in the output
+  - ntldd %CONDA_PREFIX%\Lib\site-packages\backports\lzma\_lzma*.pyd
