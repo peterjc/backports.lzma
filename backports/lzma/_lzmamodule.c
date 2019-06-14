@@ -974,13 +974,16 @@ decompress(Decompressor *d, uint8_t *data, size_t len)
                     goto error;
             }
             break;
-        } else if (d->lzs.avail_in == 0) {
-            break;
         } else if (d->lzs.avail_out == 0) {
+            /* Need to check d->lzs.avail_out before d->lzs.avail_in.
+               Maybe d->lzs's internal state still have a few bytes
+               can be output, grow the output buffer and continue. */
             if (grow_buffer(&result) == -1)
                 goto error;
             d->lzs.next_out = (uint8_t *)PyBytes_AS_STRING(result) + data_size;
             d->lzs.avail_out = PyBytes_GET_SIZE(result) - data_size;
+        } else if (d->lzs.avail_in == 0) {
+            break;
         }
     }
     if (data_size != PyBytes_GET_SIZE(result))
