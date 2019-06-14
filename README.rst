@@ -210,7 +210,8 @@ work, it was backported to also run on Python 2.6, 2.7 and 3.0, 3.1 and 3.2 by
 Peter Cock.
 
 Later contributors include: Tomer Chachamu, Wynn Wilkes, Irving Reid,
-Ralph Bean, Deroko, John Kirkham, Nehal J Wani, Michał Górny, Toshio Kuratomi.
+Ralph Bean, Deroko, John Kirkham, Nehal J Wani, Michał Górny, Toshio Kuratomi,
+Ma Lin.
 
 
 Bug Reports
