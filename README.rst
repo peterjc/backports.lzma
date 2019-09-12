@@ -199,6 +199,9 @@ Revisions
 * v0.0.13 - 11 July 2018
    * Use ``setuptools`` instead of ``distutils`` if available, useful for
      compiling your own wheel or egg files (see #34 from @wiggin15).
+* v0.0.14 - 12 September 2019
+   * Back ported fix decompressing files using ``FORMAT_ALONE`` without
+     end markers (see #40 from Ma Kin and Python issue 21872).
 
 
 Contributors
