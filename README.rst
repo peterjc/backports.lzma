@@ -202,7 +202,9 @@ Revisions
 * v0.0.14 - 12 September 2019
    * Back ported fix decompressing files using ``FORMAT_ALONE`` without
      end markers (see #40 from Ma Kin and Python issue 21872).
-
+* Archived - 14 December 2021
+   * With Python 3.6 reaching end of life this month, there is even less
+     reason to keep the repository live.
 
 Contributors
 ============
